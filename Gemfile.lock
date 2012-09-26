@@ -1,0 +1,9 @@
+GEM
+  specs:
+    fastercsv (1.5.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  fastercsv
