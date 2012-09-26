@@ -1,1 +1,1 @@
-gem "fastercsv"
+source 'http://rubygems.org'
