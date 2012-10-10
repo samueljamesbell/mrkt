@@ -11,4 +11,8 @@ class Trader
     def inform(price)
         @price = price
     end
+
+    def to_s
+        "#{self.object_id}"
+    end
 end
