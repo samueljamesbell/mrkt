@@ -15,4 +15,9 @@ class Bid < Offer
 
         result
     end
+
+    def update_budgets(offer, price)
+        @trader.budget -= offer.remaining_quantity * price
+        offer.trader.budget += @remaining_quantity * price
+    end
 end

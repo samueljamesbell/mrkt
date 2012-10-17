@@ -39,21 +39,17 @@ class Exchange
             price = ask.timestamp < bid.timestamp ? ask.price : bid.price
 
             if bid.remaining_quantity == ask.remaining_quantity
-                bid.complete price, ask.trader
-                ask.complete price, bid.trader
-
+                bid.match ask, price
+                ask.match bid, price
+ 
                 @bids.remove bid
                 @asks.remove ask
             elsif bid.remaining_quantity > ask.remaining_quantity
-                #bid.remaining_quantity -= ask.remaining_quantity
-                #ask.complete price, bid.trader
                 bid.match ask, price
 
                 @asks.remove ask
                 ask = @asks.peek
             else
-                #ask.remaining_quantity -= bid.remaining_quantity
-                #bid.complete price, ask.trader
                 ask.match bid, price
 
                 @bids.remove bid
