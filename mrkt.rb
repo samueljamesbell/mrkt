@@ -23,7 +23,7 @@ require 'ZIC'
 exchange = Exchange.new
 
 traders = []
-10.times {traders << ZIC.new(exchange)}
+3.times {traders << ZIC.new(exchange)}
 threads = []
 traders.each {|t| threads << Thread.new { t.run }}
 
