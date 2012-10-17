@@ -17,16 +17,27 @@ require 'Exchange'
 require 'Trader'
 require 'Bid'
 require 'Ask'
+require 'Equity'
+require 'ZIC'
 
 exchange = Exchange.new
-trader = Trader.new exchange
 
-exchange.accept Bid.new trader, 100, 1
-exchange.accept Bid.new trader, 200, 1
-exchange.accept Ask.new trader, 100, 3
-exchange.accept Bid.new trader, 300, 1
+traders = []
+10.times {traders << ZIC.new(exchange)}
+threads = []
+traders.each {|t| threads << Thread.new { t.run }}
 
-urlString = "http://threetoone.files.wordpress.com/2012/09/mistory_venisonshot_04-177.jpg?w=682"
+threads.each {|t| t.join}
+
+start_time = exchange.clearance_times[0].to_i
+simple_clearance_times = exchange.clearance_times.map {|t| t.to_i - start_time}
+
+urlString = Gchart.line_xy(:size => '540x540',
+                           :title => 'Price over time',
+                           :axis_with_labels => ['x', 'y'],
+                           :data => [simple_clearance_times, exchange.prices])
+
+puts urlString
 
 frame = JFrame.new
 label = JLabel.new(ImageIcon.new(ImageIO.read(URL.new(urlString))))

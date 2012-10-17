@@ -10,10 +10,13 @@ class Offer
         @timestamp = Time.now
     end
 
-    def complete(price)
+    def complete(price, counterparty)
         @remaining_quantity = 0
-        @trader.budget -= price * quantity
-        @trader.asset += quantity
+        @trader.budget -= price * @quantity
+
+        assets_to_transfer = counterparty.assets.sample(@quantity)
+        @trader.assets = @trader.assets + assets_to_transfer
+        assets_to_transfer.each {|a| counterparty.assets.delete a}
     end
 
     def to_s

@@ -9,6 +9,8 @@ class Exchange
 
         @traders = []
 
+        @semaphore = Mutex.new
+
         @prices = []
         @clearance_times = []
     end
@@ -18,17 +20,15 @@ class Exchange
     end
 
     def accept(offer)
-        if offer.instance_of? Bid
-            @bids.add offer
-        elsif offer.instance_of? Ask
-            @asks.add(offer)
+        @semaphore.synchronize do
+            if offer.instance_of? Bid
+                @bids.add offer
+            elsif offer.instance_of? Ask
+                @asks.add(offer)
+            end
+
+            clear
         end
-
-        clear
-
-        puts "BIDS: #{@bids}"
-        puts "ASKS: #{@asks}"
-        puts
     end
 
     def clear
@@ -39,25 +39,26 @@ class Exchange
             price = ask.timestamp < bid.timestamp ? ask.price : bid.price
 
             if bid.remaining_quantity == ask.remaining_quantity
-                bid.complete price
-                ask.complete price
+                bid.complete price, ask.trader
+                ask.complete price, bid.trader
 
                 @bids.remove bid
                 @asks.remove ask
             elsif bid.remaining_quantity > ask.remaining_quantity
                 bid.remaining_quantity -= ask.remaining_quantity
-                ask.complete price
+                ask.complete price, bid.trader
 
                 @asks.remove ask
                 ask = @asks.peek
             else
                 ask.remaining_quantity -= bid.remaining_quantity
-                bid.complete price
+                bid.complete price, ask.trader
 
                 @bids.remove bid
                 bid = @bids.peek
             end
 
+            #puts "CLEARED, $#{price}"
             broadcast price
         end
     end

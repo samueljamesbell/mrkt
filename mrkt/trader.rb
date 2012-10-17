@@ -1,11 +1,14 @@
 class Trader
     attr_reader :price
-    attr_accessor :budget, :asset
+    attr_accessor :budget, :assets
 
     def initialize(exchange)
         exchange.register(self)
+
+        @exchange = exchange
         @budget = 100
-        @asset = 100
+        @assets = []
+        100.times { assets << Equity.new }
     end
 
     def inform(price)

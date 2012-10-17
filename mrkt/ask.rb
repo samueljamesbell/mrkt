@@ -7,9 +7,9 @@ class Ask < Offer
     def compareTo(other)
         result = 0
 
-        if @price < other.price
+        if @price > other.price
             result = 1
-        elsif @price > other.price
+        elsif @price < other.price
             result = -1
         end
 
