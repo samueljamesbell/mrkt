@@ -6,7 +6,7 @@ class Trader
         exchange.register(self)
 
         @exchange = exchange
-        @budget = 100
+        @budget = 10000
         @assets = []
         100.times { assets << Equity.new }
 

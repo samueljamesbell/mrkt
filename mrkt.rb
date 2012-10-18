@@ -26,14 +26,16 @@ exchange = Exchange.new
 traders = []
 100.times {traders << ZIC.new(exchange)}
 threads = []
-traders.each {|t| threads << Thread.new { t.run }}
+traders.each {|trader| threads << Thread.new { trader.run }}
 
 sleep (120)
 
 traders.each {|trader| trader.stop}
-threads.each {|t| t.join}
+threads.each {|thread| thread.join}
 
 exchange.warehouse.transactions_to_csv
+
+traders.each {|trader| puts "#{trader.budget}, #{trader.assets.size}"}
 
 urlString = Gchart.line_xy(:size => '540x540',
                            :title => 'Price over time',

@@ -9,9 +9,14 @@ class ZIC < Trader
         while @running
             if rand(200) == 0
                 if rand(2) == 0
-                    offer = Bid.new self, rand(200), rand(200)
+                    begin
+                        price = rand(201)
+                        quantity = rand(201)
+                    end while price * quantity < @budget && @running
+                    
+                    offer = Bid.new self, price, quantity
                 else
-                    offer = Ask.new self, rand(200), rand(200)
+                    offer = Ask.new self, rand(200), rand(@assets.size + 1)
                 end
 
                 @exchange.accept offer
