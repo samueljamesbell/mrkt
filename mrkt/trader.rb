@@ -9,6 +9,12 @@ class Trader
         @budget = 100
         @assets = []
         100.times { assets << Equity.new }
+
+        @running = false
+    end
+
+    def stop
+        @running = false
     end
 
     def inform(price)

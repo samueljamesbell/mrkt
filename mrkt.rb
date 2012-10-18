@@ -24,13 +24,15 @@ require 'ZIC'
 exchange = Exchange.new
 
 traders = []
-3.times {traders << ZIC.new(exchange)}
+12.times {traders << ZIC.new(exchange)}
 threads = []
 traders.each {|t| threads << Thread.new { t.run }}
 
+sleep (120)
+
+traders.each {|trader| trader.stop}
 threads.each {|t| t.join}
 
-puts exchange.warehouse.transactions
 exchange.warehouse.transactions_to_csv
 
 urlString = Gchart.line_xy(:size => '540x540',
