@@ -10,15 +10,15 @@ class Offer
         @timestamp = Time.now
     end
 
-    def match(offer, price)
-        update_budgets offer, price
-
-        assets_to_transfer = offer.trader.assets.sample(@remaining_quantity)
+    def transfer_assets_from(counterparty)
+        assets_to_transfer = counterparty.assets.sample(@remaining_quantity)
         @trader.assets = @trader.assets + assets_to_transfer
-        assets_to_transfer.each {|a| offer.trader.assets.delete a}
+        assets_to_transfer.each {|a| counterparty.assets.delete a}
+    end
 
-        @remaining_quantity = offer.remaining_quantity
-        offer.remaining_quantity = 0
+    def update_budgets(offer, price)
+        @trader.budget -= offer.remaining_quantity * price
+        offer.trader.budget += @remaining_quantity * price
     end
 
     def to_s
