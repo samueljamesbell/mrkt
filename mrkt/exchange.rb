@@ -1,7 +1,7 @@
 java_import 'java.util.PriorityQueue'
 
 class Exchange
-    attr_reader :prices, :clearance_times
+    attr_reader :warehouse
 
     def initialize
         @bids = PriorityQueue.new
@@ -10,9 +10,7 @@ class Exchange
         @traders = []
 
         @semaphore = Mutex.new
-
-        @prices = []
-        @clearance_times = []
+        @warehouse = Warehouse.new
     end
 
     def register(trader)
@@ -63,8 +61,7 @@ class Exchange
 
     def broadcast(price)
         @traders.each {|trader| trader.inform price}
-        @prices << price
-        @clearance_times << Time.now
+        @warehouse.log_transaction price
     end
 
 end

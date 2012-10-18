@@ -13,6 +13,7 @@ java_import 'java.io.IOException'
 java_import 'java.net.URL'
 
 $LOAD_PATH << './mrkt'
+require 'Warehouse'
 require 'Exchange'
 require 'Trader'
 require 'Bid'
@@ -29,13 +30,13 @@ traders.each {|t| threads << Thread.new { t.run }}
 
 threads.each {|t| t.join}
 
-start_time = exchange.clearance_times[0].to_i
-simple_clearance_times = exchange.clearance_times.map {|t| t.to_i - start_time}
+puts exchange.warehouse.transactions
+exchange.warehouse.transactions_to_csv
 
 urlString = Gchart.line_xy(:size => '540x540',
                            :title => 'Price over time',
                            :axis_with_labels => ['x', 'y'],
-                           :data => [simple_clearance_times, exchange.prices])
+                           :data => exchange.warehouse.transactions_for_chart)
 
 puts urlString
 
