@@ -21,22 +21,20 @@ require 'Ask'
 require 'Equity'
 require 'ZIC'
 
-exchange = Exchange.new
+puts "Initialising an exchange with 3 ZIC traders"
+exchange = Exchange.new ZIC, 3
 
-traders = []
-100.times {traders << ZIC.new(exchange)}
-threads = []
-traders.each {|trader| threads << Thread.new { trader.run }}
+puts "Running simulation with 4 periods of 30 seconds each"
+exchange.run(4, 30)
 
-sleep (120)
-
-traders.each {|trader| trader.stop}
-threads.each {|thread| thread.join}
-
+puts "Exporting transaction prices to CSV"
 exchange.warehouse.transactions_to_csv
 
-traders.each {|trader| puts "#{trader.budget}, #{trader.assets.size}"}
+exchange.traders.each {|trader| puts "#{trader.budget}, #{trader.assets.size}"}
 
+puts "Dividends: #{exchange.warehouse.dividends}"
+
+puts "Generating Google Chart"
 urlString = Gchart.line_xy(:size => '540x540',
                            :title => 'Price over time',
                            :axis_with_labels => ['x', 'y'],
@@ -49,3 +47,4 @@ label = JLabel.new(ImageIcon.new(ImageIO.read(URL.new(urlString))))
 frame.getContentPane.add(label, BorderLayout::CENTER)
 frame.pack
 frame.setVisible true
+

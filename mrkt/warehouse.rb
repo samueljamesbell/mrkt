@@ -4,11 +4,19 @@ class Warehouse
     def initialize
         @prices = []
         @transaction_times = []
+        @dividends = []
     end
 
     def log_transaction price
         @prices << price
         @transaction_times << Time.now
+    end
+
+    def transactions
+        result = {}
+        @prices.size.times {|i| result[zeroed_transaction_times[i]] = @prices[i]}
+
+        result
     end
 
     def zeroed_transaction_times
@@ -20,16 +28,21 @@ class Warehouse
         [zeroed_transaction_times, @prices]
     end
 
-    def transactions
-        result = {}
-        @prices.size.times {|i| result[zeroed_transaction_times[i]] = @prices[i]}
-
-        result
-    end
-
     def transactions_to_csv
         CSV.open("data/#{Time.now}.csv", "w") do |csv|
             transactions.each {|t| csv << t}
         end
+    end
+
+    def log_dividend amount
+        @dividends << amount
+    end
+
+    def dividends
+        @dividends
+    end
+
+    def dividends_for_chart
+        @dividends
     end
 end

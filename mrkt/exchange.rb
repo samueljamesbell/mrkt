@@ -1,23 +1,50 @@
 java_import 'java.util.PriorityQueue'
 
 class Exchange
-    attr_reader :warehouse
+    attr_reader :warehouse, :traders
 
-    def initialize
+    def initialize trader_class, number_of_traders
         @bids = PriorityQueue.new
         @asks = PriorityQueue.new
 
         @traders = []
+        number_of_traders.times {@traders << trader_class.new(self)}
+
+        @last_dividend = 0
 
         @semaphore = Mutex.new
         @warehouse = Warehouse.new
+
     end
 
-    def register(trader)
+    def run number_of_periods, period_length
+        threads = []
+        @traders.each {|trader| threads << Thread.new { trader.run }}
+
+        number_of_periods.times do
+            sleep period_length
+            dividend = generate_dividend
+
+            @traders.each {|trader| trader.budget += trader.assets.size * dividend}
+        end
+
+        traders.each {|trader| trader.stop}
+        threads.each {|thread| thread.join}
+    end
+
+    def generate_dividend
+        amount = rand(10) + 1
+        @warehouse.log_dividend amount
+
+        amount
+    end
+
+    # deprecated
+    def register trader
         @traders << trader
     end
 
-    def accept(offer)
+    def accept offer
         @semaphore.synchronize do
             if offer.instance_of? Bid
                 @bids.add offer
@@ -64,7 +91,7 @@ class Exchange
         end
     end
 
-    def broadcast(price)
+    def broadcast price
         @traders.each {|trader| trader.inform price}
         @warehouse.log_transaction price
     end

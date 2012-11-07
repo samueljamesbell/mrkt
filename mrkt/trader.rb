@@ -3,8 +3,6 @@ class Trader
     attr_accessor :budget, :assets
 
     def initialize(exchange)
-        exchange.register(self)
-
         @exchange = exchange
         @budget = 10000
         @assets = []
