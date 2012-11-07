@@ -13,16 +13,17 @@ java_import 'java.io.IOException'
 java_import 'java.net.URL'
 
 $LOAD_PATH << './mrkt'
-require 'Warehouse'
-require 'Exchange'
-require 'Trader'
-require 'Bid'
-require 'Ask'
-require 'Equity'
-require 'ZIC'
+require 'warehouse'
+require 'exchange'
+require 'trader'
+require 'bid'
+require 'ask'
+require 'equity'
+require 'zic_Trader'
+require 'simple_Trader'
 
 puts "Initialising an exchange with 3 ZIC traders"
-exchange = Exchange.new ZIC, 3
+exchange = Exchange.new ZicTrader, 3
 
 puts "Running simulation with 4 periods of 30 seconds each"
 exchange.run(4, 30)

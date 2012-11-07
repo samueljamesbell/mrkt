@@ -2,7 +2,7 @@ require 'Trader'
 require 'Bid'
 require 'Ask'
 
-class ZIC < Trader
+class ZicTrader < Trader
     def run
         @running = true
 
