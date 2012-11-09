@@ -1,4 +1,4 @@
 mrkt
 ====
 
-Market simulation teams
+Simulation of NYSE using intelligent agents
