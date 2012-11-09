@@ -19,11 +19,11 @@ require 'trader'
 require 'bid'
 require 'ask'
 require 'equity'
-require 'zic_Trader'
-require 'simple_Trader'
+require 'zic_trader'
+require 'simple_trader'
 
-puts "Initialising an exchange with 3 ZIC traders"
-exchange = Exchange.new ZicTrader, 3
+puts "Initialising an exchange with 3 CARA traders and a start price of 100"
+exchange = Exchange.new SimpleTrader, 3, 100
 
 puts "Running simulation with 4 periods of 30 seconds each"
 exchange.run(4, 30)
@@ -40,8 +40,6 @@ urlString = Gchart.line_xy(:size => '540x540',
                            :title => 'Price over time',
                            :axis_with_labels => ['x', 'y'],
                            :data => exchange.warehouse.transactions_for_chart)
-
-puts urlString
 
 frame = JFrame.new
 label = JLabel.new(ImageIcon.new(ImageIO.read(URL.new(urlString))))

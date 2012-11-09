@@ -3,18 +3,17 @@ java_import 'java.util.PriorityQueue'
 class Exchange
     attr_reader :warehouse, :traders
 
-    def initialize trader_class, number_of_traders
+    def initialize trader_class, number_of_traders, start_price
         @bids = PriorityQueue.new
         @asks = PriorityQueue.new
 
         @traders = []
-        number_of_traders.times {@traders << trader_class.new(self)}
+        number_of_traders.times {@traders << trader_class.new(self, start_price)}
 
         @last_dividend = 0
 
         @semaphore = Mutex.new
         @warehouse = Warehouse.new
-
     end
 
     def run number_of_periods, period_length
@@ -23,9 +22,9 @@ class Exchange
 
         number_of_periods.times do
             sleep period_length
-            dividend = generate_dividend
 
-            @traders.each {|trader| trader.budget += trader.assets.size * dividend}
+            current_dividend = generate_dividend
+            @traders.each {|trader| trader.accept_dividend current_dividend}
         end
 
         traders.each {|trader| trader.stop}

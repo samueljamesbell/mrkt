@@ -7,11 +7,13 @@ class SimpleTrader < Trader
         @running = true
 
         while @running
-            calculated_value = something
-            if calculated_value > @price
-                offer = Bid.new self, price, quantity
-            elsif calculated_value < @price
-                offer = Ask.new self, price, quantity
+            risk_aversion = 0.9
+            utility = risk_aversion * @price
+
+            if utility > @price
+                offer = Bid.new self, utility, @budget / caculated_value
+            elsif utility < @price
+                offer = Ask.new self, utility, @assets.size
             end
 
             @exchange.accept offer
