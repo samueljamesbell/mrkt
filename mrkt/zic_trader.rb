@@ -1,6 +1,6 @@
-require 'Trader'
-require 'Bid'
-require 'Ask'
+require 'trader'
+require 'bid'
+require 'ask'
 
 class ZicTrader < Trader
     def run
