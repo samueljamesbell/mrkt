@@ -19,8 +19,8 @@ require 'trader'
 require 'bid'
 require 'ask'
 require 'equity'
-require 'zic_Trader'
-require 'simple_Trader'
+require 'zic_trader'
+require 'simple_trader'
 
 puts "Initialising an exchange with 3 ZIC traders"
 exchange = Exchange.new ZicTrader, 3

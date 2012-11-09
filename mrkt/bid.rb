@@ -1,4 +1,4 @@
-require 'Offer'
+require 'offer'
 
 class Bid < Offer
     include Java::JavaLang::Comparable
