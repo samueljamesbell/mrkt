@@ -4,6 +4,8 @@ class Exchange
     attr_reader :warehouse, :traders, :bids, :asks
 
     def initialize trader_class, number_of_traders, start_price
+        puts "Initialising an exchange with #{number_of_traders} #{trader_class}s and a start price of #{start_price}"
+
         @bids = PriorityQueue.new
         @asks = PriorityQueue.new
 
@@ -17,6 +19,10 @@ class Exchange
     end
 
     def run number_of_periods, period_length
+        puts "Running simulation with #{number_of_periods} periods of #{period_length} seconds each"
+        
+        visualiser = Visualiser.new self
+
         threads = []
         @traders.each {|trader| threads << Thread.new { trader.run }}
 
@@ -29,6 +35,8 @@ class Exchange
 
         traders.each {|trader| trader.stop}
         threads.each {|thread| thread.join}
+
+        visualiser.stop
     end
 
     def generate_dividend

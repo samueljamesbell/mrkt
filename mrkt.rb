@@ -25,15 +25,8 @@ require 'zic_trader'
 require 'simple_trader'
 require 'always_trader'
 
-puts "Initialising an exchange with 3 CARA traders and a start price of 100"
-exchange = Exchange.new AlwaysTrader, 4, 100
-
-visualiser = Visualiser.new exchange
-
-puts "Running simulation with 4 periods of 30 seconds each"
+exchange = Exchange.new ZicTrader, 100, 100
 exchange.run(4, 30)
-
-visualiser.stop
 
 puts "Exporting transaction prices to CSV"
 exchange.warehouse.transactions_to_csv

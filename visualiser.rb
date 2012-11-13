@@ -31,7 +31,7 @@ class Visualiser < javax.swing.JFrame
 
     while @running
       repaint
-      sleep 1
+      sleep 0.5
     end
   end
 
@@ -49,20 +49,26 @@ class Visualiser < javax.swing.JFrame
     drawAxes
     drawLabels '<<< Bids  |  Asks >>>', 'Price'
 
-    @g.drawString 'a', rand(500), rand(500)
-
-    puts @exchange.bids
-    display_bids @exchange.bids.to_array.sort
+    display_offers @exchange.bids.to_array.sort, @exchange.asks.to_array.sort
   end
 
   private
 
-  def display_bids bids
-    x = PADDING
+  def display_offers bids, asks
+    x = PADDING * 2
     y = PADDING
+
     bids.each do |bid|
       drawRectangle x, y, bid.quantity, bid.price.to_s
-      y += PADDING + RECTANGLE_HEIGHT
+      y += RECTANGLE_HEIGHT + 20
+    end
+
+    x = @dimensions.width / 2 + PADDING * 2
+    y = PADDING
+
+    asks.each do |ask|
+      drawRectangle x, y, ask.quantity, ask.price.to_s
+      y += RECTANGLE_HEIGHT + 20
     end
   end
 
