@@ -60,8 +60,10 @@ class Visualiser < javax.swing.JFrame
   def display_bids bids
     x = PADDING
     y = PADDING
-    bids.each {|bid| drawRectangle x, y, bid.quantity, bid.price.to_s}
-    y += PADDING + RECTANGLE_HEIGHT
+    bids.each do |bid|
+      drawRectangle x, y, bid.quantity, bid.price.to_s
+      y += PADDING + RECTANGLE_HEIGHT
+    end
   end
 
   def drawAxes
