@@ -1,7 +1,7 @@
 java_import 'java.util.PriorityQueue'
 
 class Exchange
-    attr_reader :warehouse, :traders
+    attr_reader :warehouse, :traders, :bids, :asks
 
     def initialize trader_class, number_of_traders, start_price
         @bids = PriorityQueue.new

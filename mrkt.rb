@@ -12,6 +12,8 @@ java_import 'java.awt.BorderLayout'
 java_import 'java.io.IOException'
 java_import 'java.net.URL'
 
+require 'visualiser'
+
 $LOAD_PATH << './mrkt'
 require 'warehouse'
 require 'exchange'
@@ -21,12 +23,17 @@ require 'ask'
 require 'equity'
 require 'zic_trader'
 require 'simple_trader'
+require 'always_trader'
 
 puts "Initialising an exchange with 3 CARA traders and a start price of 100"
-exchange = Exchange.new SimpleTrader, 3, 100
+exchange = Exchange.new AlwaysTrader, 4, 100
+
+visualiser = Visualiser.new exchange
 
 puts "Running simulation with 4 periods of 30 seconds each"
 exchange.run(4, 30)
+
+visualiser.stop
 
 puts "Exporting transaction prices to CSV"
 exchange.warehouse.transactions_to_csv
