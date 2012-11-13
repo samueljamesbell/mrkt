@@ -9,14 +9,14 @@ class GraphicsTest < javax.swing.JApplet
   include_package 'java.awt.event'
   include_package 'java.awt.geom'
   
-  @@light_blue = Color.new 0x5bc0de
-  @@mid_blue = Color.new 0x2f96b4
-  @@dark_blue = Color.new 0x1f6377
+  LIGHT_BLUE = Color.new 0x5bc0de
+  MID_BLUE = Color.new 0x2f96b4
+  DARK_BLUE = Color.new 0x1f6377
 
-  @@axis = BasicStroke.new 2
-  @@stroke = BasicStroke.new 1.5
+  AXIS_STROKE = BasicStroke.new 2
+  STROKE = BasicStroke.new 1.5
 
-  @@padding = 40
+  PADDING = 40
 
   def self.main
     frame = JFrame.new 'CDA Queue Visualisation'
@@ -39,12 +39,12 @@ class GraphicsTest < javax.swing.JApplet
     drawAxes
     drawLabels 'Hello', 'Price'
 
-    light_to_dark = GradientPaint.new 10, 10, @@light_blue, 10, 40, @@mid_blue
+    light_to_dark = GradientPaint.new 10, 10, LIGHT_BLUE, 10, 40, MID_BLUE
 
     rectangle = RoundRectangle2D::Double.new 10, 10, 200, 40, 8, 8
 
-    @g.setStroke @@stroke
-    @g.setPaint @@dark_blue
+    @g.setStroke STROKE
+    @g.setPaint DARK_BLUE
     @g.draw(rectangle)
     @g.setPaint light_to_dark
     @g.fill(rectangle)
@@ -53,16 +53,16 @@ class GraphicsTest < javax.swing.JApplet
   private
 
   def drawAxes
-    @g.setStroke @@axis
+    @g.setStroke AXIS_STROKE
     @g.setPaint Color::lightGray
-    @g.drawLine @@padding, @@padding, @@padding, @dimensions.height - @@padding
-    @g.drawLine @@padding, @dimensions.height - @@padding, @dimensions.width - @@padding, @dimensions.height - @@padding
+    @g.drawLine PADDING, PADDING, PADDING, @dimensions.height - PADDING
+    @g.drawLine PADDING, @dimensions.height - PADDING, @dimensions.width - PADDING, @dimensions.height - PADDING
   end
 
   def drawLabels x_label, y_label
     @g.setPaint Color::black
-    @g.drawString x_label, @dimensions.width / 2, @dimensions.height - @@padding + 25
-    @g.drawString y_label, @@padding - 35, @dimensions.height / 2
+    @g.drawString x_label, @dimensions.width / 2, @dimensions.height - PADDING + 25
+    @g.drawString y_label, PADDING - 35, @dimensions.height / 2
   end
 
 end
