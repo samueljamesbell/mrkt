@@ -55,15 +55,16 @@ class Visualiser < javax.swing.JFrame
   private
 
   def display_offers bids, asks
-    x = PADDING * 2
+    center = @dimensions.width / 2
+    x = center - 10
     y = PADDING
 
     bids.each do |bid|
-      drawRectangle x, y, bid.quantity, bid.price.to_s
+      drawRectangle x - bid.quantity, y, bid.quantity, bid.price.to_s
       y += RECTANGLE_HEIGHT + 20
     end
 
-    x = @dimensions.width / 2 + PADDING * 2
+    x = center + 10
     y = PADDING
 
     asks.each do |ask|
@@ -80,8 +81,11 @@ class Visualiser < javax.swing.JFrame
   end
 
   def drawLabels x_label, y_label
+    fontMetrics = @g.getFontMetrics
+    x_label_width = fontMetrics.stringWidth x_label
+
     @g.setPaint Color::black
-    @g.drawString x_label, @dimensions.width / 2, @dimensions.height - PADDING + 25
+    @g.drawString x_label, (@dimensions.width / 2) - (x_label_width / 2), @dimensions.height - PADDING + 25
     @g.drawString y_label, PADDING - 35, @dimensions.height / 2
   end
 
@@ -92,7 +96,7 @@ class Visualiser < javax.swing.JFrame
     @g.setPaint DARK_BLUE
     @g.draw rectangle
 
-    @g.setPaint GradientPaint.new x, y, LIGHT_BLUE, x, y + RECTANGLE_HEIGHT, MID_BLUE
+    @g.setPaint GradientPaint.new x, y, MID_BLUE, x, y + RECTANGLE_HEIGHT, DARK_BLUE
     @g.fill rectangle
 
     fontMetrics = @g.getFontMetrics
