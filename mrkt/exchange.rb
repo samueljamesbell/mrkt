@@ -1,19 +1,21 @@
 java_import 'java.util.PriorityQueue'
 
 class Exchange
-    attr_reader :warehouse, :traders, :bids, :asks, :equity_risk, :cash_risk
+    attr_reader :warehouse, :traders, :bids, :asks, :equity_risk, :cash_risk, :config
 
-    def initialize strategy, number_of_traders, start_price
-        puts "Initialising an exchange with #{number_of_traders} traders and a start price of #{start_price}"
+    def initialize strategy, config
+        puts "Initialising an exchange with #{config['number_of_traders']} traders and a start price of #{config['start_price']}"
 
-        @equity_risk = 0.1
-        @cash_risk = 0.02
+        @config = config
+
+        @equity_risk = @config['equity_risk']
+        @cash_risk = @config['cash_risk']
 
         @bids = PriorityQueue.new
         @asks = PriorityQueue.new
 
         @traders = []
-        number_of_traders.times {@traders << Trader.new(self, start_price, strategy)}
+        @config['number_of_traders'].times {@traders << Trader.new(self, strategy)}
 
         @last_dividend = 0
 
@@ -21,16 +23,16 @@ class Exchange
         @warehouse = Warehouse.new
     end
 
-    def run number_of_periods, period_length
-        puts "Running simulation with #{number_of_periods} periods of #{period_length} seconds each"
+    def run
+        puts "Running simulation with #{@config['number_of_periods']} periods of #{@config['period_length']} seconds each"
         
         visualiser = Visualiser.new self
 
         threads = []
         @traders.each {|trader| threads << Thread.new { trader.run }}
 
-        number_of_periods.times do
-            sleep period_length
+        @config['number_of_periods'].times do
+            sleep @config['period_length']
 
             current_dividend = generate_dividend
             @traders.each {|trader| trader.accept_dividend current_dividend}

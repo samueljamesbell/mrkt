@@ -1,5 +1,6 @@
 require 'java'
 require 'rubygems'
+require 'yaml'
 require 'bundler/setup'
 require 'gchart'
 
@@ -22,9 +23,10 @@ require 'bid'
 require 'ask'
 require 'equity'
 
-#Initialise an exchange with a default strategy, number of traders and a start price
-exchange = Exchange.new({:noise => 1}, 100, 100)
-exchange.run(10, 30)
+config = YAML.load_file 'config.yml'
+
+exchange = Exchange.new 'ZI', config
+exchange.run
 
 puts "Exporting transaction prices to CSV"
 exchange.warehouse.transactions_to_csv

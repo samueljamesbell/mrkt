@@ -6,17 +6,17 @@ class Trader
   attr_reader :price
   attr_accessor :budget, :assets, :strategy
 
-  DEFAULT_STRATEGY = {:risk_aversion => 0, :noise => 0, :price_regression => 0, :average_dividend => 0, :exchange_price => 1}
+  DEFAULT_STRATEGY = {:risk_aversion => 0}
 
-  def initialize exchange, start_price, strategy = {}
+  def initialize exchange, strategy
     @exchange = exchange
-    @budget = 10000
+    @budget = @exchange.config['initial_budget']
     @assets = []
-    @strategy = DEFAULT_STRATEGY.merge strategy
+    @strategy = DEFAULT_STRATEGY.merge @exchange.config['strategies'][strategy]
 
-    @price = start_price
+    @price = @exchange.config['starting_price']
 
-    100.times { assets << Equity.new(0.1, 0.02) }
+    @exchange.config['initial_assets'].times { assets << Equity.new }
 
     @dividend_history = []
 
