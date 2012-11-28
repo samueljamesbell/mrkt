@@ -21,11 +21,9 @@ require 'trader'
 require 'bid'
 require 'ask'
 require 'equity'
-require 'zic_trader'
-require 'simple_trader'
-require 'always_trader'
 
-exchange = Exchange.new ZicTrader, 100, 100
+#Initialise an exchange with a default strategy, number of traders and a start price
+exchange = Exchange.new({:noise => 1}, 100, 100)
 exchange.run(10, 30)
 
 puts "Exporting transaction prices to CSV"

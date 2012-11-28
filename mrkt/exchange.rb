@@ -1,16 +1,19 @@
 java_import 'java.util.PriorityQueue'
 
 class Exchange
-    attr_reader :warehouse, :traders, :bids, :asks
+    attr_reader :warehouse, :traders, :bids, :asks, :equity_risk, :cash_risk
 
-    def initialize trader_class, number_of_traders, start_price
-        puts "Initialising an exchange with #{number_of_traders} #{trader_class}s and a start price of #{start_price}"
+    def initialize strategy, number_of_traders, start_price
+        puts "Initialising an exchange with #{number_of_traders} traders and a start price of #{start_price}"
+
+        @equity_risk = 0.1
+        @cash_risk = 0.02
 
         @bids = PriorityQueue.new
         @asks = PriorityQueue.new
 
         @traders = []
-        number_of_traders.times {@traders << trader_class.new(self, start_price)}
+        number_of_traders.times {@traders << Trader.new(self, start_price, strategy)}
 
         @last_dividend = 0
 
