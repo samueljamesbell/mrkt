@@ -1,0 +1,14 @@
+number_of_traders: 100
+starting_price: 100
+number_of_periods: 10
+period_length: 30
+equity_risk: 0.1
+cash_risk: 0.02
+
+strategies:
+  default:
+    noise: 0
+    risk_aversion: 0
+  Zic:
+    noise: 1
+    risk_aversion: 0
