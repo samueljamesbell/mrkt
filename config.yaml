@@ -13,4 +13,3 @@ strategies:
     risk_aversion: 0
   Zic:
     noise: 1
-    risk_aversion: 0

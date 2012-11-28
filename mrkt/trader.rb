@@ -6,7 +6,7 @@ class Trader
   attr_reader :price
   attr_accessor :budget, :assets, :strategy
 
-  DEFAULT_STRATEGY = {:risk_aversion => 0, :noise => 0}
+  DEFAULT_STRATEGY = {:risk_aversion => 0, :noise => 0, :price_regression => 0, :average_dividend => 0, :exchange_price => 1}
 
   def initialize exchange, start_price, strategy = {}
     @exchange = exchange
@@ -60,10 +60,15 @@ class Trader
   private
 
   def value
-    #@strategy[:noise] * (rand(@price) + @price / 2)
-    @strategy[:noise] * rand(201)
+    weights = 0
+    sum = 0
 
-    # + other features * weights
+    sum = @strategy.each do |k, v|
+      sum += (self.send(k) * v) unless k == :risk_aversion
+      weights += v
+    end
+
+    return sum / weights
   end
 
   def utility offer_type, value, quantity
@@ -89,6 +94,25 @@ class Trader
     end
 
     return risk * @strategy[:risk_aversion]
+  end
+
+  # Valuation calculations
+  
+  def noise
+    rand(@price) + @price / 2
+  end
+
+  def price_regression
+    #exchange.warehouse.transactions
+    1
+  end
+
+  def average_dividend
+    @exchange.warehouse.dividends.inject(:+) / @exchange.warehouse.dividends.size
+  end
+
+  def exchange_price
+    @price
   end
 
 end
