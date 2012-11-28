@@ -30,10 +30,10 @@ class Trader
       v = value
       if v > @price
         q = quantity :bid
-        offer = Bid.new self, utility(q), q
+        offer = Bid.new self, utility(:bid, v, q), q
       elsif v < @price
         q = quantity :ask
-        offer = Ask.new self, utility(q), q
+        offer = Ask.new self, utility(:ask, v, q), q
       end
 
       @exchange.accept offer

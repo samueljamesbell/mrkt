@@ -4,6 +4,8 @@ number_of_periods: 10
 period_length: 30
 equity_risk: 0.1
 cash_risk: 0.02
+initial_budget: 10000
+initial_assets: 100
 
 strategies:
   default:
