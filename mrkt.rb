@@ -26,7 +26,7 @@ require 'simple_trader'
 require 'always_trader'
 
 exchange = Exchange.new ZicTrader, 100, 100
-exchange.run(4, 30)
+exchange.run(10, 30)
 
 puts "Exporting transaction prices to CSV"
 exchange.warehouse.transactions_to_csv
