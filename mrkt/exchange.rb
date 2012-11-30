@@ -4,7 +4,7 @@ class Exchange
     attr_reader :warehouse, :traders, :bids, :asks, :equity_risk, :cash_risk, :config
 
     def initialize strategy, config
-        puts "Initialising an exchange with #{config['number_of_traders']} traders and a start price of #{config['start_price']}"
+        puts "Initialising an exchange with #{config['number_of_traders']} traders and a start price of #{config['starting_price']}"
 
         @config = config
 

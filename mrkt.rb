@@ -1,6 +1,6 @@
 require 'java'
 require 'rubygems'
-require 'yaml'
+require 'pp'
 require 'bundler/setup'
 require 'gchart'
 
@@ -24,6 +24,7 @@ require 'ask'
 require 'equity'
 
 config = YAML.load_file 'config.yml'
+y config
 
 exchange = Exchange.new 'ZI', config
 exchange.run

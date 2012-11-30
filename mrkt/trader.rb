@@ -6,14 +6,13 @@ class Trader
   attr_reader :price
   attr_accessor :budget, :assets, :strategy
 
-  DEFAULT_STRATEGY = {:risk_aversion => 0}
+  DEFAULT_STRATEGY = {'risk_aversion' => 0}
 
   def initialize exchange, strategy
     @exchange = exchange
     @budget = @exchange.config['initial_budget']
     @assets = []
     @strategy = DEFAULT_STRATEGY.merge @exchange.config['strategies'][strategy]
-
     @price = @exchange.config['starting_price']
 
     @exchange.config['initial_assets'].times { assets << Equity.new }
@@ -63,8 +62,8 @@ class Trader
     weights = 0
     sum = 0
 
-    sum = @strategy.each do |k, v|
-      sum += (self.send(k) * v) unless k == :risk_aversion
+    @strategy.each do |k, v|
+      sum += (self.send(k) * v) unless k == 'risk_aversion'
       weights += v
     end
 
@@ -93,13 +92,13 @@ class Trader
       risk = @exchange.cash_risk * (@budget + (quantity * @price))
     end
 
-    return risk * @strategy[:risk_aversion]
+    return risk * @strategy['risk_aversion']
   end
 
   # Valuation calculations
   
   def noise
-    rand(@price) + @price / 2
+    rand(@exchange.config['starting_price']) + @exchange.config['starting_price'] / 2
   end
 
   def price_regression
