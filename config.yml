@@ -1,0 +1,20 @@
+number_of_traders: 12
+starting_price: 100
+number_of_periods: 4
+period_length: 15
+equity_risk: 0.1
+cash_risk: 0.02
+initial_budget: 10000
+initial_assets: 100
+
+strategies:
+  ZI:
+    risk_aversion: 0
+    noise: 1
+  simple:
+    risk_aversion: 0.9
+    exchange_price: 0.9
+    price_regression: 1
+    average_dividend: 1
+
+    

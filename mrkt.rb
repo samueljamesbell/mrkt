@@ -32,7 +32,7 @@ exchange.run
 puts "Exporting transaction prices to CSV"
 exchange.warehouse.transactions_to_csv
 
-exchange.traders.each {|trader| puts "#{trader.budget}, #{trader.assets.size}"}
+exchange.traders.each {|trader| puts "TRADER: #{trader.budget}, #{trader.assets.size}"}
 
 puts "Dividends: #{exchange.warehouse.dividends}"
 

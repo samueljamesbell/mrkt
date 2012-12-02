@@ -29,10 +29,10 @@ class Trader
       v = value
       if v > @price
         q = quantity :bid
-        offer = Bid.new self, utility(:bid, v, q), q
+        offer = Bid.new self, utility(:bid, v, q) / q, q
       elsif v < @price
         q = quantity :ask
-        offer = Ask.new self, utility(:ask, v, q), q
+        offer = Ask.new self, utility(:ask, v, q) / q, q
       end
 
       @exchange.accept offer
@@ -66,12 +66,14 @@ class Trader
       sum += (self.send(k) * v) unless k == 'risk_aversion'
       weights += v
     end
-
+    
     return sum / weights
   end
 
   def utility offer_type, value, quantity
-    (value * quantity) - risk(offer_type, quantity)
+    u = (value * quantity) - risk(offer_type, quantity)
+    puts u
+    return u
   end
 
   def quantity offer_type
@@ -91,13 +93,15 @@ class Trader
     elsif offer_type == :ask
       risk = @exchange.cash_risk * (@budget + (quantity * @price))
     end
-
+    
     return risk * @strategy['risk_aversion']
   end
 
   # Valuation calculations
   
   def noise
+    sleep rand(@exchange.config['starting_price'] * @strategy['noise'])
+
     rand(@exchange.config['starting_price']) + @exchange.config['starting_price'] / 2
   end
 
