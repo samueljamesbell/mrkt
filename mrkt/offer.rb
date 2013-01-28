@@ -8,6 +8,7 @@ class Offer
         @quantity = quantity
         @remaining_quantity = quantity
         @timestamp = Time.now
+        @active = true
     end
 
     def transfer_assets_from(counterparty)
@@ -19,6 +20,14 @@ class Offer
     def update_budgets(offer, price)
         @trader.budget -= offer.remaining_quantity * price
         offer.trader.budget += @remaining_quantity * price
+    end
+
+    def active?
+      @active == true
+    end
+
+    def deactivate!
+      @active = false
     end
 
     def to_s

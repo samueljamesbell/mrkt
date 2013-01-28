@@ -1,111 +1,119 @@
 java_import 'java.util.PriorityQueue'
 
 class Exchange
-    attr_reader :warehouse, :traders, :bids, :asks, :equity_risk, :cash_risk, :config
+  attr_reader :warehouse, :traders, :bids, :asks, :equity_risk, :cash_risk, :config
 
-    def initialize strategy, config
-        puts "Initialising an exchange with #{config['number_of_traders']} traders and a start price of #{config['starting_price']}"
+  def initialize strategy, config
+    puts "Initialising an exchange with #{config['number_of_traders']} traders and a start price of #{config['starting_price']}"
 
-        @config = config
+    @config = config
 
-        @equity_risk = @config['equity_risk']
-        @cash_risk = @config['cash_risk']
+    @equity_risk = @config['equity_risk']
+    @cash_risk = @config['cash_risk']
 
-        @bids = PriorityQueue.new
-        @asks = PriorityQueue.new
+    @bids = PriorityQueue.new
+    @asks = PriorityQueue.new
 
-        @traders = []
-        @config['number_of_traders'].times {@traders << Trader.new(self, strategy)}
+    @traders = []
+    @config['number_of_traders'].times {@traders << Trader.new(self, strategy)}
 
-        @last_dividend = 0
+    @last_dividend = 0
 
-        @semaphore = Mutex.new
-        @warehouse = Warehouse.new
+    @semaphore = Mutex.new
+    @warehouse = Warehouse.new
+  end
+
+  def run
+    puts "Running simulation with #{@config['number_of_periods']} periods of #{@config['period_length']} seconds each"
+
+    visualiser = Visualiser.new self
+
+    threads = []
+    @traders.each {|trader| threads << Thread.new { trader.run }}
+
+    @config['number_of_periods'].times do
+      sleep @config['period_length']
+
+      current_dividend = generate_dividend
+      @traders.each {|trader| trader.accept_dividend current_dividend}
     end
 
-    def run
-        puts "Running simulation with #{@config['number_of_periods']} periods of #{@config['period_length']} seconds each"
-        
-        visualiser = Visualiser.new self
+    traders.each {|trader| trader.stop}
+    threads.each {|thread| thread.join}
 
-        threads = []
-        @traders.each {|trader| threads << Thread.new { trader.run }}
+    visualiser.stop
+  end
 
-        @config['number_of_periods'].times do
-            sleep @config['period_length']
+  def generate_dividend
+    amount = rand(10) + 1
+    @warehouse.log_dividend amount
 
-            current_dividend = generate_dividend
-            @traders.each {|trader| trader.accept_dividend current_dividend}
-        end
+    amount
+  end
 
-        traders.each {|trader| trader.stop}
-        threads.each {|thread| thread.join}
+  # deprecated
+  def register trader
+    @traders << trader
+  end
 
-        visualiser.stop
+  def accept offer
+    @semaphore.synchronize do
+      if offer.instance_of? Bid
+        @bids.add offer
+      elsif offer.instance_of? Ask
+        @asks.add(offer)
+      end
+
+      clear
     end
+  end
 
-    def generate_dividend
-        amount = rand(10) + 1
-        @warehouse.log_dividend amount
+  def clear
+    bid = @bids.peek
+    ask = @asks.peek
 
-        amount
-    end
+    while !bid.nil? && !ask.nil?  && bid.price >= ask.price && (bid.remaining_quantity != 0 || ask.remaining_quantity != 0)
+      price = ask.timestamp < bid.timestamp ? ask.price : bid.price
 
-    # deprecated
-    def register trader
-        @traders << trader
-    end
+      bid.transfer_assets_from ask.trader
+      bid.update_budgets ask, price
 
-    def accept offer
-        @semaphore.synchronize do
-            if offer.instance_of? Bid
-                @bids.add offer
-            elsif offer.instance_of? Ask
-                @asks.add(offer)
-            end
-
-            clear
-        end
-    end
-
-    def clear
+      if !bid.active?
+        @bids.remove bid
         bid = @bids.peek
+      elsif !ask.active?
+        @asks.remove ask
         ask = @asks.peek
+      else
+        if bid.remaining_quantity == ask.remaining_quantity
+          bid.remaining_quantity = 0
+          ask.remaining_quantity = 0
 
-        while !bid.nil? && !ask.nil?  && bid.price >= ask.price && (bid.remaining_quantity != 0 || ask.remaining_quantity != 0)
-            price = ask.timestamp < bid.timestamp ? ask.price : bid.price
+          @bids.remove bid
+          @asks.remove ask
+        elsif bid.remaining_quantity > ask.remaining_quantity
+          bid.remaining_quantity -= ask.remaining_quantity
+          ask.remaining_quantity = 0
 
-            bid.transfer_assets_from ask.trader
-            bid.update_budgets ask, price
+          @asks.remove ask
+          ask = @asks.peek
+        else
+          ask.remaining_quantity -= bid.remaining_quantity
+          bid.remaining_quantity = 0
 
-            if bid.remaining_quantity == ask.remaining_quantity
-                bid.remaining_quantity = 0
-                ask.remaining_quantity = 0
- 
-                @bids.remove bid
-                @asks.remove ask
-            elsif bid.remaining_quantity > ask.remaining_quantity
-                bid.remaining_quantity -= ask.remaining_quantity
-                ask.remaining_quantity = 0
-
-                @asks.remove ask
-                ask = @asks.peek
-            else
-                ask.remaining_quantity -= bid.remaining_quantity
-                bid.remaining_quantity = 0
-
-                @bids.remove bid
-                bid = @bids.peek
-            end
-
-            #puts "CLEARED, $#{price}"
-            broadcast price
+          @bids.remove bid
+          bid = @bids.peek
         end
+
+        #puts "CLEARED, $#{price}"
+        broadcast price
+      end
     end
+  end
 
     def broadcast price
-        @traders.each {|trader| trader.inform price}
-        @warehouse.log_transaction price
+      @traders.each {|trader| trader.inform price}
+      @warehouse.log_transaction price
     end
 
-end
+  end
