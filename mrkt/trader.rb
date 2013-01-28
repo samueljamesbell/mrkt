@@ -30,12 +30,12 @@ class Trader
       if v > @price
         q = quantity :bid
         offer = Bid.new self, utility(:bid, v, q) / q, q
-        @latest_offer.deactivate!
+        @latest_offer.deactivate! unless @latest_offer.nil?
         @exchange.accept offer
       elsif v < @price
         q = quantity :ask
         offer = Ask.new self, utility(:ask, v, q) / q, q
-        @latest_offer.deactivate!
+        @latest_offer.deactivate! unless @latest_offer.nil?
         @exchange.accept offer
       end
     end
@@ -74,7 +74,6 @@ class Trader
 
   def utility offer_type, value, quantity
     u = (value * quantity) - risk(offer_type, quantity)
-    puts u
     return u
   end
 

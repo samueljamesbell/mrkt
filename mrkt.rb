@@ -24,7 +24,6 @@ require 'ask'
 require 'equity'
 
 config = YAML.load_file 'config.yml'
-y config
 
 exchange = Exchange.new 'ZI', config
 exchange.run
