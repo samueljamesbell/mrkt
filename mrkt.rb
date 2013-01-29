@@ -1,8 +1,8 @@
 require 'java'
 require 'rubygems'
-require 'pp'
 require 'bundler/setup'
-require 'gchart'
+
+Bundler.require
 
 java_import 'javax.imageio.ImageIO'
 java_import 'javax.swing.ImageIcon'
@@ -25,7 +25,7 @@ require 'equity'
 
 config = YAML.load_file 'config.yml'
 
-exchange = Exchange.new 'ZI', config
+exchange = Exchange.new 'simple', config
 exchange.run
 
 puts "Exporting transaction prices to CSV"

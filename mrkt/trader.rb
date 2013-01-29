@@ -99,7 +99,7 @@ class Trader
   end
 
   # Valuation calculations
-  
+
   def noise
     sleep rand(@exchange.config['starting_price'] * @strategy['noise'])
 
@@ -107,12 +107,26 @@ class Trader
   end
 
   def price_regression
-    #exchange.warehouse.transactions
-    1
+    prices = @exchange.warehouse.transactions
+    if !prices.empty?
+      x_vector = prices.keys.to_vector(:scale)
+      y_vector = prices.values.to_vector(:scale)
+      regression = Statsample::Regression.simple(x_vector, y_vector)
+      puts @exchange.warehouse.latest_transaction_time
+      print regression.y(@exchange.warehouse.latest_transaction_time + 10) #replace 10 with investment horizon?
+      abort
+    else
+      return 0
+    end
   end
 
   def average_dividend
-    @exchange.warehouse.dividends.inject(:+) / @exchange.warehouse.dividends.size
+    dividends = @exchange.warehouse.dividends
+    if !dividends.empty?
+      return dividends.inject(:+) / dividends.size
+    else
+      return 0
+    end
   end
 
   def exchange_price
