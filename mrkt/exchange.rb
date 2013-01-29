@@ -73,18 +73,20 @@ class Exchange
     ask = @asks.peek
 
     while !bid.nil? && !ask.nil?  && bid.price >= ask.price && (bid.remaining_quantity != 0 || ask.remaining_quantity != 0)
-      price = ask.timestamp < bid.timestamp ? ask.price : bid.price
-
-      bid.transfer_assets_from ask.trader
-      bid.update_budgets ask, price
-
       if !bid.active?
+        puts "Removed #{bid}"
         @bids.remove bid
         bid = @bids.peek
       elsif !ask.active?
+        puts "Removed #{ask}"
         @asks.remove ask
         ask = @asks.peek
       else
+        price = ask.timestamp < bid.timestamp ? ask.price : bid.price
+
+        bid.transfer_assets_from ask.trader
+        bid.update_budgets ask, price
+        
         if bid.remaining_quantity == ask.remaining_quantity
           bid.remaining_quantity = 0
           ask.remaining_quantity = 0
