@@ -98,39 +98,28 @@ class Trader
     return risk * @strategy['risk_aversion']
   end
 
-  # Valuation calculations
+  # Valuation components
+
+  def exchange_price
+    @price
+  end
+
+  def price_regression
+    @exchange.warehouse.price_regression
+  end
+
+  def dividend_regression
+    @exchange.warehouse.dividend_regression
+  end
+
+  def average_dividend
+    @exchange.warehouse.average_dividend
+  end
 
   def noise
     sleep rand(@exchange.config['starting_price'] * @strategy['noise'])
 
     rand(@exchange.config['starting_price']) + @exchange.config['starting_price'] / 2
-  end
-
-  def price_regression
-    prices = @exchange.warehouse.transactions
-    if !prices.empty?
-      x_vector = prices.keys.to_vector(:scale)
-      y_vector = prices.values.to_vector(:scale)
-      regression = Statsample::Regression.simple(x_vector, y_vector)
-      puts @exchange.warehouse.latest_transaction_time
-      print regression.y(@exchange.warehouse.latest_transaction_time + 10) #replace 10 with investment horizon?
-      abort
-    else
-      return 0
-    end
-  end
-
-  def average_dividend
-    dividends = @exchange.warehouse.dividends
-    if !dividends.empty?
-      return dividends.inject(:+) / dividends.size
-    else
-      return 0
-    end
-  end
-
-  def exchange_price
-    @price
   end
 
 end

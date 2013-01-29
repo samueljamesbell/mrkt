@@ -1,20 +1,27 @@
 require 'csv'
 
 class Warehouse
-  attr_reader :latest_transaction_time
+  attr_reader :price_regression, :dividend_regression, :average_dividend
 
   def initialize
     @prices = []
     @transaction_times = []
     @dividends = []
-    @latest_transaction_time = 0
+    
+    @price_regression = 0
+    @dividend_regression = 0
+    @average_dividend = 0
   end
 
   def log_transaction price
     @prices << price
     t = Time.now
     @transaction_times << t
-    @latest_transaction_time = t
+
+    Thread.new { calculate_price_regression t }
+    Thread.new { calculate_dividend_regression }
+    Thread.new { calculate_average_dividend }
+    #perform other calculations here
   end
 
   def transactions
@@ -49,5 +56,29 @@ class Warehouse
 
   def dividends_for_chart
     @dividends
+  end
+
+  def calculate_price_regression time
+    prices = @transactions
+    if !prices.empty?
+      x_vector = prices.keys.to_vector(:scale)
+      y_vector = prices.values.to_vector(:scale)
+      regression = Statsample::Regression.simple(x_vector, y_vector)
+      @price_regression = regression.y(time + 10) #replace 10 with investment horizon?
+    end
+  end
+
+  def calculate_dividend_regression
+    dividends = @dividends
+    if !dividends.empty?
+      x_vector = dividends.to_vector(:scale)
+      y_vector = (0..dividends.size-1).to_vector(:scale)
+      regression = Statsample::Regression.simple(x_vector, y_vector)
+      @dividend_regression = regression.y(dividends.size)
+    end
+  end
+
+  def calculate_average_dividend
+    @average_dividend = @dividends.inject(:+) / @dividends.size unless @dividends.empty?
   end
 end

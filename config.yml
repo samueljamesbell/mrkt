@@ -15,6 +15,7 @@ strategies:
     risk_aversion: 0.9
     exchange_price: 0.9
     price_regression: 1
+    dividend_regression: 1
     average_dividend: 1
 
     
