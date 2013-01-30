@@ -41,6 +41,7 @@ class Exchange
     traders.each {|trader| trader.stop}
     threads.each {|thread| thread.join}
 
+    puts "Maximum performance of any trade: #{performance}"
     visualiser.stop
   end
 
@@ -86,7 +87,7 @@ class Exchange
 
         bid.transfer_assets_from ask.trader
         bid.update_budgets ask, price
-        
+
         if bid.remaining_quantity == ask.remaining_quantity
           bid.remaining_quantity = 0
           ask.remaining_quantity = 0
@@ -113,9 +114,13 @@ class Exchange
     end
   end
 
-    def broadcast price
-      @traders.each {|trader| trader.inform price}
-      @warehouse.log_transaction price
-    end
-
+  def broadcast price
+    @traders.each {|trader| trader.inform price}
+    @warehouse.log_transaction price
   end
+
+  def performance
+    @traders.map{|t| t.performance}.max
+  end
+
+end

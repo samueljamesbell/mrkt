@@ -54,6 +54,10 @@ class Trader
     @dividend_history << amount
   end
 
+  def performance
+    @budget + assets.size * @price
+  end
+
   def to_s
     "#{self.object_id}"
   end
