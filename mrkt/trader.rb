@@ -69,7 +69,7 @@ class Trader
     sum = 0
 
     @strategy.each do |k, v|
-      sum += (self.send(k) * v) unless k == 'risk_aversion'
+      sum += (self.send(k) * v) unless k == 'risk_aversion' || v == 0
       weights += v
     end
     
