@@ -35,7 +35,12 @@ class Evolution
   end
 
   def mutate strategy
-
+    r = java.util.Random.new
+    sum = 0
+    strategy.each {|k, v| strategy[k] += r.nextGaussian; sum += strategy[k]}
+    strategy.each {|k, v| strategy[k] /= sum}
+  
+    return strategy
   end
 
   def spawn_trader strategy
