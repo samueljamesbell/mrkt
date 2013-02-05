@@ -25,30 +25,23 @@ require 'equity'
 
 config = YAML.load_file 'config.yml'
 
-Simulation.run config
+simulation = Simulation.new config
+simulation.run
 
-#exchange = Exchange.new 'simple', config
-#exchange.run
+#puts "Exporting transaction prices to CSV"
+#simulation.warehouse.transactions_to_csv
 
+#puts "Dividends: #{simulation.warehouse.dividends}"
 
-# TODO MOVE WAREHOUSE TO SIMULATION AND AWAY FROM EXCHANGE
+#puts "Generating Google Chart"
+#urlString = Gchart.line_xy(:size => '540x540',
+#                           :title => 'Price over time',
+#                           :axis_with_labels => ['x', 'y'],
+#                           :data => simulation.warehouse.transactions_for_chart)
 
-puts "Exporting transaction prices to CSV"
-exchange.warehouse.transactions_to_csv
-
-exchange.traders.each {|trader| puts "TRADER: #{trader.budget}, #{trader.assets.size}"}
-
-puts "Dividends: #{exchange.warehouse.dividends}"
-
-puts "Generating Google Chart"
-urlString = Gchart.line_xy(:size => '540x540',
-                           :title => 'Price over time',
-                           :axis_with_labels => ['x', 'y'],
-                           :data => exchange.warehouse.transactions_for_chart)
-
-frame = JFrame.new
-label = JLabel.new(ImageIcon.new(ImageIO.read(URL.new(urlString))))
-frame.getContentPane.add(label, BorderLayout::CENTER)
-frame.pack
-frame.setVisible true
+#frame = JFrame.new
+#label = JLabel.new(ImageIcon.new(ImageIO.read(URL.new(urlString))))
+#frame.getContentPane.add(label, BorderLayout::CENTER)
+#frame.pack
+#frame.setVisible true
 

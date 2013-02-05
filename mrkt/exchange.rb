@@ -19,7 +19,7 @@ class Exchange
     @last_dividend = 0
 
     @semaphore = Mutex.new
-    @warehouse = Warehouse.new
+    @warehouse = warehouse
   end
 
   def run

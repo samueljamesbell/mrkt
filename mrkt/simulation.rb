@@ -1,11 +1,18 @@
 class Simulation
-  def self.run config
-    exchange = Exchange.new config
+  attr_reader :warehouse
+
+  def initialize config
+    @config = config
+    @warehouse = Warehouse.new
+  end
+
+  def self.run
+    exchange = Exchange.new @config, @warehouse
     evolution = Evolution.new exchange
     # zero = Zero.new exchange
     # reinforcement = Reinforcement.new exchange
 
-    config['simulation_runs'].times do
+    @config['simulation_runs'].times do
       exchange.run
       evolution.optimise
       # zero.optimise
