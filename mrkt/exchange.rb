@@ -3,8 +3,8 @@ java_import 'java.util.PriorityQueue'
 class Exchange
   attr_reader :warehouse, :traders, :bids, :asks, :equity_risk, :cash_risk, :config
 
-  def initialize strategy, config
-    puts "Initialising an exchange with #{config['number_of_traders']} traders and a start price of #{config['starting_price']}"
+  def initialize config
+    puts "Initialising an exchange start price of #{config['starting_price']}"
 
     @config = config
 
@@ -15,7 +15,6 @@ class Exchange
     @asks = PriorityQueue.new
 
     @traders = []
-    @config['number_of_traders'].times {@traders << Trader.new(self, strategy)}
 
     @last_dividend = 0
 
@@ -52,9 +51,12 @@ class Exchange
     amount
   end
 
-  # deprecated
   def register trader
     @traders << trader
+  end
+
+  def deregister trader
+    @traders.delete trader
   end
 
   def accept offer
