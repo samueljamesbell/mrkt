@@ -36,9 +36,9 @@ class Evolution
 
   def mutate strategy
     r = java.util.Random.new
-    sum = 0
-    strategy.each {|k, v| strategy[k] += r.nextGaussian; sum += strategy[k]}
-    strategy.each {|k, v| strategy[k] /= sum}
+    strategy.each {|k, v| strategy[k] += r.nextGaussian}
+    max = strategy.values.max
+    strategy.each {|k, v| strategy[k] /= max}
   
     return strategy
   end

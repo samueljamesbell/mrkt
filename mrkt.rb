@@ -28,6 +28,11 @@ config = YAML.load_file 'config.yml'
 simulation = Simulation.new config
 simulation.run
 
+# WORK ON GETTING PERFORMANCE DATA OUT AFTER EACH SIMULATION ITERATION
+# WANT PERFORMANCE OF EACH TRADER, GROUPED BY ALGORITHM
+#
+# POSSIBLY AUTOMATE ALGORITHM RUNNING? OVERKILL?
+
 #puts "Exporting transaction prices to CSV"
 #simulation.warehouse.transactions_to_csv
 
