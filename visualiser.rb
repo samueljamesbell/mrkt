@@ -13,26 +13,26 @@ class Visualiser < javax.swing.JFrame
   PADDING = 40
   RECTANGLE_HEIGHT = 30
 
-  def initialize exchange
+  def initialize config
     super 'CDA Queue Visualisation'
 
-    @exchange = exchange
     @running = false
 
     setDefaultCloseOperation JFrame::EXIT_ON_CLOSE
     setSize 550, Toolkit.getDefaultToolkit.getScreenSize.height
     setVisible true
-
-    Thread.new { run }
   end
 
-  def run 
+  def run exchange
+    @exchange = exchange
     @running = true
 
-    while @running
-      repaint
-      sleep 0.2
-    end
+    Thread.new {
+      while @running
+        repaint
+        sleep 0.2
+      end
+    }
   end
 
   def stop

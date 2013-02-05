@@ -4,7 +4,7 @@ class Exchange
   attr_reader :warehouse, :traders, :bids, :asks, :equity_risk, :cash_risk, :config
 
   def initialize config
-    puts "Initialising an exchange start price of #{config['starting_price']}"
+    puts "Initialising an exchange with start price of #{config['starting_price']}"
 
     @config = config
 
@@ -23,9 +23,9 @@ class Exchange
   end
 
   def run
-    puts "Running simulation with #{@config['number_of_periods']} periods of #{@config['period_length']} seconds each"
+    puts "Exchange running with #{@config['number_of_periods']} periods of #{@config['period_length']} seconds each"
 
-    visualiser = Visualiser.new self
+    #visualiser = Visualiser.new self
 
     threads = []
     @traders.each {|trader| threads << Thread.new { trader.run }}
@@ -40,8 +40,7 @@ class Exchange
     traders.each {|trader| trader.stop}
     threads.each {|thread| thread.join}
 
-    puts "Maximum performance of any trade: #{performance}"
-    visualiser.stop
+    #visualiser.stop
   end
 
   def generate_dividend
@@ -120,9 +119,4 @@ class Exchange
     @traders.each {|trader| trader.inform price}
     @warehouse.log_transaction price
   end
-
-  def performance
-    @traders.map{|t| t.performance}.max
-  end
-
 end
