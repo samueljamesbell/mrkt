@@ -12,7 +12,7 @@ class Trader
     @exchange = exchange
     @budget = @exchange.config['initial_budget']
     @assets = []
-    @strategy = DEFAULT_STRATEGY.merge @exchange.config['strategies'][strategy]
+    @strategy = DEFAULT_STRATEGY.merge strategy
     @price = @exchange.config['starting_price']
 
     @exchange.config['initial_assets'].times { assets << Equity.new }
@@ -54,6 +54,16 @@ class Trader
   def accept_dividend(amount)
     @budget += amount * @assets.size
     @dividend_history << amount
+  end
+
+  def reset
+    @budget = @exchange.config['initial_budget']
+    @assets = []
+    @exchange.config['initial_assets'].times { assets << Equity.new }
+    
+    @price = @exchange.config['starting_price']
+
+    @dividend_history = []
   end
 
   def performance

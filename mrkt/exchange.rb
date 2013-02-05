@@ -16,7 +16,7 @@ class Exchange
 
     @traders = []
 
-    @last_dividend = 0
+    #@last_dividend = 0
 
     @semaphore = Mutex.new
     @warehouse = warehouse
@@ -24,8 +24,6 @@ class Exchange
 
   def run
     puts "Exchange running with #{@config['number_of_periods']} periods of #{@config['period_length']} seconds each"
-
-    #visualiser = Visualiser.new self
 
     threads = []
     @traders.each {|trader| threads << Thread.new { trader.run }}
@@ -39,8 +37,6 @@ class Exchange
 
     traders.each {|trader| trader.stop}
     threads.each {|thread| thread.join}
-
-    #visualiser.stop
   end
 
   def generate_dividend
@@ -118,5 +114,11 @@ class Exchange
   def broadcast price
     @traders.each {|trader| trader.inform price}
     @warehouse.log_transaction price
+  end
+
+  def reset
+    @bids.clear
+    @asks.clear
+    @traders.each {|trader| trader.reset}
   end
 end

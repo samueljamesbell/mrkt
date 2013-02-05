@@ -20,8 +20,9 @@ class Simulation
       evolution.optimise
       # zero.optimise
       # reinforcement.optimise
-    
+
       @visualiser.stop
+      @exchange.reset
     end
   end
 end
