@@ -19,6 +19,8 @@ class Trader
 
     @dividend_history = []
 
+    @exchange.register self
+
     @running = false
   end
 

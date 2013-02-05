@@ -1,11 +1,11 @@
 class Evolution
   def initialize exchange
     @exchange = exchange
+    @population = []
+
     @exchange.config['algorithms']['evolution']['number_of_traders'].times do
       strategy = exchange.config['algorithms']['evolution']['strategy'].each {|k, v| v = rand}
-      trader = Trader.new strategy
-      @exchange.register trader
-      @population << trader
+      @population << Trader.new(@exchange, strategy)
     end
   end
 
@@ -25,8 +25,7 @@ class Evolution
   end
 
   def spawn_trader strategy
-    trader = Trader.new strategy
-    @exchange.register trader
+    trader = Trader.new @exchange, strategy
     @population << trader
   end
 
