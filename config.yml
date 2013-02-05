@@ -1,3 +1,4 @@
+simulation_runs: 100
 number_of_traders: 12
 starting_price: 100
 number_of_periods: 4
