@@ -25,8 +25,13 @@ require 'equity'
 
 config = YAML.load_file 'config.yml'
 
-exchange = Exchange.new 'simple', config
-exchange.run
+Simulation.run config
+
+#exchange = Exchange.new 'simple', config
+#exchange.run
+
+
+# TODO MOVE WAREHOUSE TO SIMULATION AND AWAY FROM EXCHANGE
 
 puts "Exporting transaction prices to CSV"
 exchange.warehouse.transactions_to_csv

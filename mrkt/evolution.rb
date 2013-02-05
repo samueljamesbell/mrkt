@@ -17,11 +17,25 @@ class Evolution
   end
 
   def best percentage
-    @population.sort{|x, y| y.fitness <=> x.fitness}[0..(@population.size / (100 / percentage))-1]
+    @population.sort{|x, y| y.performance <=> x.performance}[0..(@population.size / (100 / percentage))-1]
   end
 
   def worst percentage
-    @population.sort{|x, y| x.fitness <=> y.fitness}[0..(@population.size / (100 / percentage))-1]
+    @population.sort{|x, y| x.performance <=> y.performance}[0..(@population.size / (100 / percentage))-1]
+  end
+
+  def crossover mother, father
+    child = {}
+
+    random_keys = mother.keys.shuffle[0..(mother.keys.size/2)-1]
+    random_keys.each {|k| child[k] = mother[k]}
+    (father.keys - random_keys).each {|k| child[k] = father[k]}
+
+    return child
+  end
+
+  def mutate strategy
+
   end
 
   def spawn_trader strategy
