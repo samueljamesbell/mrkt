@@ -16,12 +16,14 @@ java_import 'java.net.URL'
 require 'visualiser'
 
 $LOAD_PATH << './mrkt'
+require 'simulation'
 require 'warehouse'
 require 'exchange'
 require 'trader'
 require 'bid'
 require 'ask'
 require 'equity'
+require 'evolution'
 
 config = YAML.load_file 'config.yml'
 

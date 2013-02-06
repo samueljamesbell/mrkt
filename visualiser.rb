@@ -20,7 +20,7 @@ class Visualiser < javax.swing.JFrame
 
     setDefaultCloseOperation JFrame::EXIT_ON_CLOSE
     setSize 550, Toolkit.getDefaultToolkit.getScreenSize.height
-    setVisible true
+    setVisible true if config['visualiser']
   end
 
   def run exchange

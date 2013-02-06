@@ -3,8 +3,11 @@ java_import 'java.util.PriorityQueue'
 class Exchange
   attr_reader :warehouse, :traders, :bids, :asks, :equity_risk, :cash_risk, :config
 
-  def initialize config
-    puts "Initialising an exchange with start price of #{config['starting_price']}"
+  def initialize config, warehouse
+    puts "Exchange initialised"
+    puts "Starting price: #{config['starting_price']}"
+    puts "Number of periods: #{config['number_of_periods']}"
+    puts "Period length: #{config['period_length']} seconds"
 
     @config = config
 
@@ -23,8 +26,6 @@ class Exchange
   end
 
   def run
-    puts "Exchange running with #{@config['number_of_periods']} periods of #{@config['period_length']} seconds each"
-
     threads = []
     @traders.each {|trader| threads << Thread.new { trader.run }}
 

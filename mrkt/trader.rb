@@ -8,20 +8,20 @@ class Trader
 
   DEFAULT_STRATEGY = {'risk_aversion' => 0}
 
-  def initialize exchange, strategy
+  def initialize exchange, strategy, optimiser
     @exchange = exchange
+    @strategy = DEFAULT_STRATEGY.merge strategy
+    @optimiser = optimiser    
+
     @budget = @exchange.config['initial_budget']
     @assets = []
-    @strategy = DEFAULT_STRATEGY.merge strategy
-    @price = @exchange.config['starting_price']
-
     @exchange.config['initial_assets'].times { assets << Equity.new }
 
+    @price = @exchange.config['starting_price']
     @dividend_history = []
+    @running = false
 
     @exchange.register self
-
-    @running = false
   end
 
   def run
@@ -71,7 +71,7 @@ class Trader
   end
 
   def to_s
-    "#{self.object_id}"
+    "#{@optimiser}: #{performance}"
   end
 
   private
