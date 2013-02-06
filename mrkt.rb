@@ -24,11 +24,14 @@ require 'bid'
 require 'ask'
 require 'equity'
 require 'evolution'
+require 'zero'
 
 config = YAML.load_file 'config.yml'
 
 simulation = Simulation.new config
 simulation.run
+
+
 
 # WORK ON GETTING PERFORMANCE DATA OUT AFTER EACH SIMULATION ITERATION
 # WANT PERFORMANCE OF EACH TRADER, GROUPED BY ALGORITHM

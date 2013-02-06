@@ -19,6 +19,11 @@ algorithms:
       dividend_regression: 1
       average_dividend: 1
       noise: 0
+  zero:
+    number_of_traders: 4
+    strategy:
+      risk_aversion: 0
+      noise: 1
 
 strategies:
   ZI:

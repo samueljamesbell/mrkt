@@ -10,7 +10,7 @@ class Simulation
 
   def run
     evolution = Evolution.new @exchange
-    # zero = Zero.new exchange
+    zero = Zero.new @exchange
     # reinforcement = Reinforcement.new exchange
 
     @config['simulation_runs'].times do |i|
@@ -19,7 +19,7 @@ class Simulation
 
       @exchange.run
       evolution.optimise
-      # zero.optimise
+      zero.optimise
       # reinforcement.optimise
       
       puts @exchange.traders.sort_by! {|t| t.performance}
