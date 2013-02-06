@@ -1,14 +1,4 @@
-class Evolution
-  def initialize exchange
-    @exchange = exchange
-    @population = []
-
-    @exchange.config['algorithms']['evolution']['number_of_traders'].times do
-      strategy = exchange.config['algorithms']['evolution']['strategy'].each {|k, v| v = rand}
-      @population << Trader.new(@exchange, strategy, self.class)
-    end
-  end
-
+class Evolution < Optimiser
   def optimise
     parents = best(50).combination(2).to_a.shuffle[0..(@population.size / 4)-1]
     strategies = parents.map {|p| mutate(crossover(p[0].strategy, p[1].strategy))}

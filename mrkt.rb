@@ -23,6 +23,7 @@ require 'trader'
 require 'bid'
 require 'ask'
 require 'equity'
+require 'optimiser'
 require 'evolution'
 require 'zero'
 

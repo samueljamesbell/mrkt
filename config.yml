@@ -13,12 +13,12 @@ algorithms:
   evolution:
     number_of_traders: 4
     strategy:
-      risk_aversion: 0.9
-      exchange_price: 0.9
-      price_regression: 1
-      dividend_regression: 1
-      average_dividend: 1
-      noise: 0
+      risk_aversion: rand
+      exchange_price: rand
+      price_regression: rand
+      dividend_regression: rand
+      average_dividend: rand
+      noise: rand
   zero:
     number_of_traders: 4
     strategy:
