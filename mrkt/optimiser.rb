@@ -6,8 +6,8 @@ class Optimiser
     algorithm = @exchange.config['algorithms'][self.class.to_s.downcase]
 
     @population = algorithm['number_of_traders'].times.map do
-      strategy = algorithm['strategy'].each {|k, v| v = rand if v == 'rand'}
-      Trader.new(@exchange, strategy, self.class)
+      strategy = algorithm['strategy']
+      Trader.new(@exchange, strategy.each {|k, v| strategy[k] = rand if v == 'rand'}, self.class)
     end
   end
 
