@@ -1,3 +1,5 @@
+require_relative 'optimiser'
+
 class Evolution < Optimiser
   def optimise
     parents = best(50).combination(2).to_a.shuffle[0..(@population.size / 4)-1]

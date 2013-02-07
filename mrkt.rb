@@ -3,28 +3,16 @@ require 'bundler/setup'
 
 Bundler.require
 
-java_import 'javax.imageio.ImageIO'
-java_import 'javax.swing.ImageIcon'
-java_import 'javax.swing.JFrame'
-java_import 'javax.swing.JLabel'
+#java_import 'javax.imageio.ImageIO'
+#java_import 'javax.swing.ImageIcon'
+#java_import 'javax.swing.JFrame'
+#java_import 'javax.swing.JLabel'
 
-java_import 'java.awt.BorderLayout'
-java_import 'java.io.IOException'
-java_import 'java.net.URL'
+#java_import 'java.awt.BorderLayout'
+#java_import 'java.io.IOException'
+#java_import 'java.net.URL'
 
-require 'visualiser'
-
-$LOAD_PATH << './mrkt'
-require 'simulation'
-require 'warehouse'
-require 'exchange'
-require 'trader'
-require 'bid'
-require 'ask'
-require 'equity'
-require 'optimiser'
-require 'evolution'
-require 'zero'
+require 'mrkt/simulation'
 
 config = YAML.load_file 'config.yml'
 

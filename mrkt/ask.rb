@@ -1,4 +1,4 @@
-require 'offer'
+require_relative 'offer'
 
 class Ask < Offer
     include Java::JavaLang::Comparable

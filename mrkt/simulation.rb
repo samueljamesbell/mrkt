@@ -1,3 +1,9 @@
+require_relative 'utils/warehouse'
+require_relative 'utils/visualiser'
+require_relative 'exchange'
+require_relative 'optimisers/evolution'
+require_relative 'optimisers/zero'
+
 class Simulation
   attr_reader :warehouse
 

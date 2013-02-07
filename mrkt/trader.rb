@@ -1,6 +1,6 @@
-require 'bid'
-require 'ask'
-require 'equity'
+require_relative 'bid'
+require_relative 'ask'
+require_relative 'equity'
 
 class Trader
   attr_reader :price

@@ -1,3 +1,5 @@
+require 'mrkt/trader'
+
 class Optimiser
   def initialize exchange
     @exchange = exchange

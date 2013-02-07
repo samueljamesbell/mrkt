@@ -1,2 +1,0 @@
-class Zero < Optimiser
-end
