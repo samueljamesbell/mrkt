@@ -11,6 +11,10 @@ class Simulation
     @visualiser = Visualiser.new
   end
 
+  def self.run
+    instance.run
+  end
+
   def run
     evolution = Evolution.new
     zero = Zero.new
@@ -29,10 +33,4 @@ class Simulation
       Exchange.reset
     end
   end
-
-  class << self
-    extend Forwardable
-    def_delegators :instance, *Simulation.instance_methods(false)
-  end
-
 end

@@ -2,6 +2,8 @@ require 'csv'
 
 class Warehouse
   include Singleton
+  extend SingleForwardable
+
   attr_reader :price_regression, :dividend_regression, :average_dividend
 
   def initialize
@@ -82,10 +84,7 @@ class Warehouse
   def calculate_average_dividend
     @average_dividend = @dividends.inject(:+) / @dividends.size unless @dividends.empty?
   end
-
-  class << self
-    extend Forwardable
-    def_delegators :instance, *Warehouse.instance_methods(false)
-  end
+  
+  def_delegators :instance, *Warehouse.instance_methods(false)
 
 end
