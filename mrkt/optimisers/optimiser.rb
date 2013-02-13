@@ -5,7 +5,7 @@ class Optimiser
     @exchange = exchange
     @population = []
 
-    algorithm = @exchange.config['algorithms'][self.class.to_s.downcase]
+    algorithm = CONFIG['algorithms'][self.class.to_s.downcase]
 
     @population = algorithm['number_of_traders'].times.map do
       strategy = algorithm['strategy']

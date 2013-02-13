@@ -13,11 +13,11 @@ class Trader
     @strategy = DEFAULT_STRATEGY.merge strategy
     @optimiser = optimiser    
 
-    @budget = @exchange.config['initial_budget']
+    @budget = CONFIG['initial_budget']
     @assets = []
-    @exchange.config['initial_assets'].times { assets << Equity.new }
+    CONFIG['initial_assets'].times { assets << Equity.new }
 
-    @price = @exchange.config['starting_price']
+    @price = CONFIG['starting_price']
     @dividend_history = []
     @running = false
 
@@ -57,11 +57,11 @@ class Trader
   end
 
   def reset
-    @budget = @exchange.config['initial_budget']
+    @budget = CONFIG['initial_budget']
     @assets = []
-    @exchange.config['initial_assets'].times { assets << Equity.new }
+    CONFIG['initial_assets'].times { assets << Equity.new }
     
-    @price = @exchange.config['starting_price']
+    @price = CONFIG['starting_price']
 
     @dividend_history = []
   end
@@ -121,21 +121,21 @@ class Trader
   end
 
   def price_regression
-    @exchange.warehouse.price_regression
+    Warehouse.price_regression
   end
 
   def dividend_regression
-    @exchange.warehouse.dividend_regression
+    Warehouse.dividend_regression
   end
 
   def average_dividend
-    @exchange.warehouse.average_dividend
+    Warehouse.average_dividend
   end
 
   def noise
-    sleep rand(@exchange.config['starting_price'] * @strategy['noise'])
+    sleep rand(CONFIG['starting_price'] * @strategy['noise'])
 
-    rand(@exchange.config['starting_price']) + @exchange.config['starting_price'] / 2
+    rand(CONFIG['starting_price']) + CONFIG['starting_price'] / 2
   end
 
 end

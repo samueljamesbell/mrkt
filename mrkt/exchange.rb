@@ -1,18 +1,16 @@
 java_import 'java.util.PriorityQueue'
 
 class Exchange
-  attr_reader :warehouse, :traders, :bids, :asks, :equity_risk, :cash_risk, :config
+  attr_reader :traders, :bids, :asks, :equity_risk, :cash_risk
 
-  def initialize config, warehouse
+  def initialize
     puts "Exchange initialised"
-    puts "Starting price: #{config['starting_price']}"
-    puts "Number of periods: #{config['number_of_periods']}"
-    puts "Period length: #{config['period_length']} seconds"
+    puts "Starting price: #{CONFIG['starting_price']}"
+    puts "Number of periods: #{CONFIG['number_of_periods']}"
+    puts "Period length: #{CONFIG['period_length']} seconds"
 
-    @config = config
-
-    @equity_risk = @config['equity_risk']
-    @cash_risk = @config['cash_risk']
+    @equity_risk = CONFIG['equity_risk']
+    @cash_risk = CONFIG['cash_risk']
 
     @bids = PriorityQueue.new
     @asks = PriorityQueue.new
@@ -22,15 +20,14 @@ class Exchange
     #@last_dividend = 0
 
     @semaphore = Mutex.new
-    @warehouse = warehouse
   end
 
   def run
     threads = []
     @traders.each {|trader| threads << Thread.new { trader.run }}
 
-    @config['number_of_periods'].times do
-      sleep @config['period_length']
+    CONFIG['number_of_periods'].times do
+      sleep CONFIG['period_length']
 
       current_dividend = generate_dividend
       @traders.each {|trader| trader.accept_dividend current_dividend}
@@ -42,7 +39,7 @@ class Exchange
 
   def generate_dividend
     amount = rand(10) + 1
-    @warehouse.log_dividend amount
+    Warehouse.log_dividend amount
 
     amount
   end
@@ -114,7 +111,7 @@ class Exchange
 
   def broadcast price
     @traders.each {|trader| trader.inform price}
-    @warehouse.log_transaction price
+    Warehouse.log_transaction price
   end
 
   def reset

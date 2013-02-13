@@ -14,9 +14,9 @@ Bundler.require
 
 require 'mrkt/simulation'
 
-config = YAML.load_file 'config.yml'
+CONFIG = YAML.load_file 'config.yml'
 
-simulation = Simulation.new config
+simulation = Simulation.new
 simulation.run
 
 #puts "Exporting transaction prices to CSV"

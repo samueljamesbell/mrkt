@@ -5,13 +5,9 @@ require_relative 'optimisers/evolution'
 require_relative 'optimisers/zero'
 
 class Simulation
-  attr_reader :warehouse
-
-  def initialize config
-    @config = config
-    @warehouse = Warehouse.new
-    @visualiser = Visualiser.new @config
-    @exchange = Exchange.new @config, @warehouse
+  def initialize
+    @visualiser = Visualiser.new
+    @exchange = Exchange.new
   end
 
   def run
@@ -19,8 +15,7 @@ class Simulation
     zero = Zero.new @exchange
     # reinforcement = Reinforcement.new exchange
 
-    @config['simulation_runs'].times do |i|
-      puts "Running simulation #{i}"
+    CONFIG['simulation_runs'].times do |i| puts "Running simulation #{i}"
       @visualiser.run @exchange
 
       @exchange.run
