@@ -6,6 +6,7 @@ platforms :jruby do
   gem 'googlecharts'
   gem 'jruby-openssl'
   gem 'statsample'
+  gem 'fnordmetric-client'
 end
 
 platforms :ruby do

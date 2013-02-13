@@ -4,7 +4,7 @@ Bundler.require
 
 FnordMetric.namespace :mrkt do
 
-  #hide_overview
+  hide_overview
   hide_active_users
 
 
