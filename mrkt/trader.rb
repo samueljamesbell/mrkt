@@ -8,8 +8,7 @@ class Trader
 
   DEFAULT_STRATEGY = {'risk_aversion' => 0}
 
-  def initialize exchange, strategy, optimiser
-    @exchange = exchange
+  def initialize strategy, optimiser
     @strategy = DEFAULT_STRATEGY.merge strategy
     @optimiser = optimiser    
 
@@ -21,7 +20,7 @@ class Trader
     @dividend_history = []
     @running = false
 
-    @exchange.register self
+    Exchange.register self
   end
 
   def run
@@ -33,12 +32,12 @@ class Trader
         q = quantity :bid
         offer = Bid.new self, utility(:bid, v, q) / q, q
         @latest_offer.deactivate! unless @latest_offer.nil?
-        @exchange.accept offer
+        Exchange.accept offer
       elsif v < @price
         q = quantity :ask
         offer = Ask.new self, utility(:ask, v, q) / q, q
         @latest_offer.deactivate! unless @latest_offer.nil?
-        @exchange.accept offer
+        Exchange.accept offer
       end
     end
   end
@@ -106,9 +105,9 @@ class Trader
 
   def risk offer_type, quantity
     if offer_type == :bid
-      risk = @exchange.equity_risk * quantity
+      risk = Exchange.equity_risk * quantity
     elsif offer_type == :ask
-      risk = @exchange.cash_risk * (@budget + (quantity * @price))
+      risk = Exchange.cash_risk * (@budget + (quantity * @price))
     end
     
     return risk * @strategy['risk_aversion']

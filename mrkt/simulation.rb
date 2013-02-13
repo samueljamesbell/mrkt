@@ -7,25 +7,24 @@ require_relative 'optimisers/zero'
 class Simulation
   def initialize
     @visualiser = Visualiser.new
-    @exchange = Exchange.new
   end
 
   def run
-    evolution = Evolution.new @exchange
-    zero = Zero.new @exchange
+    evolution = Evolution.new
+    zero = Zero.new
     # reinforcement = Reinforcement.new exchange
 
     CONFIG['simulation_runs'].times do |i| puts "Running simulation #{i}"
-      @visualiser.run @exchange
+      @visualiser.run
 
-      @exchange.run
+      Exchange.run
       evolution.optimise
       zero.optimise
       # reinforcement.optimise
       
-      puts @exchange.traders.sort_by! {|t| t.performance}
+      puts Exchange.traders.sort_by! {|t| t.performance}
       @visualiser.stop
-      @exchange.reset
+      Exchange.reset
     end
   end
 end

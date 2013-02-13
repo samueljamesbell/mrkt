@@ -23,8 +23,7 @@ class Visualiser < javax.swing.JFrame
     setVisible true if CONFIG['visualiser']
   end
 
-  def run exchange
-    @exchange = exchange
+  def run
     @running = true
 
     Thread.new {
@@ -50,7 +49,7 @@ class Visualiser < javax.swing.JFrame
     draw_axes
     draw_labels '<<< Bids  |  Asks >>>', 'Price'
 
-    display_offers @exchange.bids.to_array.sort, @exchange.asks.to_array.sort
+    display_offers Wxchange.bids.to_array.sort, Exchange.asks.to_array.sort
   end
 
   private

@@ -1,6 +1,7 @@
 java_import 'java.util.PriorityQueue'
 
 class Exchange
+  include Singleton
   attr_reader :traders, :bids, :asks, :equity_risk, :cash_risk
 
   def initialize
@@ -119,4 +120,10 @@ class Exchange
     @asks.clear
     @traders.each {|trader| trader.reset}
   end
+
+  class << self
+    extend Forwardable
+    def_delegators :instance, *Exchange.instance_methods(false)
+  end
+
 end

@@ -36,12 +36,12 @@ class Evolution < Optimiser
   end
 
   def spawn_trader strategy
-    trader = Trader.new @exchange, strategy, self.class
+    trader = Trader.new strategy, self.class
     @population << trader
   end
 
   def kill trader
-    @exchange.deregister trader
+    Exchange.deregister trader
     @population.delete trader
   end
 end
