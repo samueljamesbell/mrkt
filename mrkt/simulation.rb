@@ -5,6 +5,8 @@ require_relative 'optimisers/evolution'
 require_relative 'optimisers/zero'
 
 class Simulation
+  include Singleton
+
   def initialize
     @visualiser = Visualiser.new
   end
@@ -27,4 +29,10 @@ class Simulation
       Exchange.reset
     end
   end
+
+  class << self
+    extend Forwardable
+    def_delegators :instance, *Simulation.instance_methods(false)
+  end
+
 end
