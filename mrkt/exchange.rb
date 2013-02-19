@@ -20,8 +20,7 @@ class Exchange
 
     @traders = []
 
-    #@last_dividend = 0
-
+    @dividends = RandomWalk.generate(0..CONFIG['starting_price'], CONFIG['number_of_periods'], 5)
     @semaphore = Mutex.new
   end
 
@@ -32,7 +31,7 @@ class Exchange
     CONFIG['number_of_periods'].times do
       sleep CONFIG['period_length']
 
-      current_dividend = generate_dividend
+      current_dividend = dividend
       @traders.each {|trader| trader.accept_dividend current_dividend}
     end
 
@@ -40,10 +39,10 @@ class Exchange
     threads.each {|thread| thread.join}
   end
 
-  def generate_dividend
-    amount = rand(10) + 1
+  def dividend
+    amount = @dividends.delete_at 0
     Warehouse.log_dividend amount
-
+    puts amount
     amount
   end
 

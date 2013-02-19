@@ -17,14 +17,24 @@ FnordMetric.namespace :mrkt do
     #:series => [:via_twitter, :via_facebook],
     #:resolution => 2.minutes
 
-  timeseries_gauge :transaction_prices,
-    :title => "Transaction Prices",
-    :series => [:standard],
-    :resolution => 1.second
+  widget 'Transactions',
+    :title => 'Transaction Prices',
+    :gauges => [:latest_price],
+    :type => :timeline,
+    :width => 100,
+    :autoupdate => 1
 
-  toplist_gauge :traders,
-    :title => "Traders",
-    :resolution => 1.minute
+  gauge :latest_price,
+    :progressive => true
+
+  #timeseries_gauge :transaction_prices,
+    #:title => "Transaction Prices",
+    #:series => [:standard],
+    #:resolution => 1.second
+
+  #toplist_gauge :traders,
+    #:title => "Traders",
+  #  :resolution => 1.minute
 
   #distribution_gauge :user_age_distribution,
     #:title => "User Age Distribution",

@@ -1,3 +1,8 @@
+PATH
+  remote: lib/random-walk
+  specs:
+    random-walk (0.0.2)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -112,4 +117,6 @@ DEPENDENCIES
   fnordmetric-client
   googlecharts
   jruby-openssl
+  random-walk (= 0.0.2)!
+  redis
   statsample

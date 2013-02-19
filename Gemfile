@@ -7,6 +7,8 @@ platforms :jruby do
   gem 'jruby-openssl'
   gem 'statsample'
   gem 'fnordmetric-client'
+  gem 'redis'
+  gem 'random-walk', '0.0.2', :path => 'lib/random-walk'
 end
 
 platforms :ruby do
