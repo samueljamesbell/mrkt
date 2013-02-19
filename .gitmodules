@@ -1,3 +1,0 @@
-[submodule "lib/random-walk"]
-	path = lib/random-walk
-	url = git@github.com:samueljamesbell/random-walk.git
