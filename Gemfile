@@ -8,7 +8,7 @@ platforms :jruby do
   gem 'statsample'
   gem 'fnordmetric-client'
   gem 'redis'
-  gem 'random-walk', '0.0.2', :path => 'lib/random-walk'
+  gem 'random-walk', :git => 'git@github.com:samueljamesbell/random-walk.git'
 end
 
 platforms :ruby do
