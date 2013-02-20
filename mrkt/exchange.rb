@@ -70,7 +70,7 @@ class Exchange
     bid = @bids.peek
     ask = @asks.peek
 
-    while !bid.nil? && !ask.nil?  && bid.price >= ask.price && (bid.remaining_quantity != 0 || ask.remaining_quantity != 0)
+    while bid && ask && bid.price >= ask.price && (bid.remaining_quantity != 0 || ask.remaining_quantity != 0)
       if !bid.active?
         puts "Removed #{bid}"
         @bids.remove bid
