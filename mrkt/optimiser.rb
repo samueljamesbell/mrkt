@@ -27,7 +27,7 @@ class Optimiser
     algorithm = CONFIG['algorithms'][self.class.to_s.downcase]
 
     @population = algorithm['number_of_traders'].times.map do
-      strategy = algorithm['strategy']
+      strategy = algorithm['strategy'].clone
       Trader.new(strategy.each {|k, v| strategy[k] = rand if v == 'rand'}, self.class)
     end
   end
