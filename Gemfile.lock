@@ -5,7 +5,6 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.3.2)
-    bouncy-castle-java (1.5.0146.1)
     clbustos-rtf (0.4.2)
     daemons (1.1.9)
     dirty-memoize (0.0.4)
@@ -39,8 +38,6 @@ GEM
       tilt
     hiredis (0.4.5)
     i18n (0.6.1)
-    jruby-openssl (0.8.2)
-      bouncy-castle-java (>= 1.5.0146.1)
     json (1.7.7)
     json (1.7.7-java)
     minimization (0.2.1)
@@ -110,7 +107,6 @@ DEPENDENCIES
   fnordmetric
   fnordmetric-client
   googlecharts
-  jruby-openssl
   random-walk
   redis
   statsample

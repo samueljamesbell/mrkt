@@ -42,7 +42,7 @@ class Exchange
   def dividend
     amount = @dividends.delete_at 0
     Warehouse.log_dividend amount
-    puts amount
+
     amount
   end
 
@@ -120,6 +120,7 @@ class Exchange
     @bids.clear
     @asks.clear
     @traders.each {|trader| trader.reset}
+    @dividends = RandomWalk.generate(0..CONFIG['starting_price'], CONFIG['number_of_periods'], 5)
   end
 
   def_delegators :instance, *Exchange.instance_methods(false)

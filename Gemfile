@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 
 platforms :jruby do
   gem 'googlecharts'
-  gem 'jruby-openssl'
+  #gem 'jruby-openssl'
   gem 'statsample'
   gem 'fnordmetric-client'
   gem 'redis'
