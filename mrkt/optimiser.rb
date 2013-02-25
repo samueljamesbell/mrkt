@@ -1,6 +1,26 @@
 require 'mrkt/trader'
 
 class Optimiser
+
+  class << self
+    attr_accessor :subclasses, :optimisers
+  end
+
+  @subclasses = Set.new
+  @optimisers = []
+
+  def self.inherited(subclass)
+    self.subclasses << subclass
+  end
+
+  def self.init
+    self.optimisers = self.subclasses.map {|subclass| subclass.new}
+  end
+
+  def self.optimise
+    self.optimisers.each {|optimiser| optimiser.optimise}
+  end
+
   def initialize
     @population = []
 
@@ -15,4 +35,6 @@ class Optimiser
   def optimise
     # No action by default
   end
+
+  Dir[File.dirname(__FILE__) + '/optimisers/*.rb'].each {|file| require file}
 end
