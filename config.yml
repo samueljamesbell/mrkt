@@ -10,7 +10,7 @@ initial_assets: 100
 visualiser: false 
 
 algorithms:
-  evolution:
+  discrete_crossover:
     number_of_traders: 4
     strategy:
       risk_aversion: rand
@@ -19,6 +19,14 @@ algorithms:
       dividend_regression: rand
       average_dividend: rand
       noise: rand
+  mean_crossover:
+    number_of_traders: 4
+    strategy:
+      risk_aversion: rand
+      exchange_price: rand
+      price_regression: rand
+      dividend_regression: rand
+      average_dividend: rand
   zero:
     number_of_traders: 4
     strategy:

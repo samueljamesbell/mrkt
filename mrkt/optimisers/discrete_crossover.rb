@@ -1,6 +1,6 @@
 require 'mrkt/optimisers/genetic_optimiser'
 
-class Evolution < GeneticOptimiser 
+class DiscreteCrossover < GeneticOptimiser 
 
   def crossover mother, father
     child = {}

@@ -28,7 +28,7 @@ class Optimiser
   def initialize
     @population = []
 
-    algorithm = CONFIG['algorithms'][self.class.to_s.downcase]
+    algorithm = CONFIG['algorithms'][snake_case(self.class.to_s)]
 
     @population = algorithm['number_of_traders'].times.map do
       strategy = algorithm['strategy'].clone
@@ -38,6 +38,14 @@ class Optimiser
 
   def optimise
     # No action by default
+  end
+
+  private
+  
+  # Taken from Merb support library - http://rubygems.org/gems/extlib
+  def snake_case(string)
+    return downcase if string.match(/\A[A-Z]+\z/)
+    string.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').gsub(/([a-z])([A-Z])/, '\1_\2').downcase
   end
 
   Dir[File.dirname(__FILE__) + '/optimisers/*.rb'].each {|file| require file}
