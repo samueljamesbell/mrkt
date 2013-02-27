@@ -1,6 +1,6 @@
-require 'mrkt/optimiser'
+require 'mrkt/optimisers/genetic_optimiser'
 
-class Evolution < Optimiser
+class Evolution < GeneticOptimiser 
   def optimise
     parents = best(50).combination(2).to_a.shuffle[0..(@population.size / 4)-1]
     strategies = parents.map {|p| mutate(crossover(p[0].strategy, p[1].strategy))}

@@ -9,16 +9,20 @@ class Optimiser
   @subclasses = Set.new
   @optimisers = []
 
-  def self.inherited(subclass)
-    self.subclasses << subclass
+  def Optimiser.inherited(subclass)
+    Optimiser.subclasses << subclass
   end
 
-  def self.init
-    self.optimisers = self.subclasses.map {|subclass| subclass.new}
+  def Optimiser.abstract
+    Optimiser.subclasses.delete self
   end
 
-  def self.optimise
-    self.optimisers.each {|optimiser| optimiser.optimise}
+  def Optimiser.init
+    Optimiser.optimisers = Optimiser.subclasses.map {|subclass| subclass.new}
+  end
+
+  def Optimiser.optimise
+    Optimiser.optimisers.each {|optimiser| optimiser.optimise}
   end
 
   def initialize
