@@ -2,7 +2,7 @@ require 'mrkt/optimisers/genetic_optimiser'
 
 class MeanCrossover < GeneticOptimiser 
 
-  def crossover mother, father
+  def crossover mother, father, *weights
     result = mother.clone
     result.map {|k, v| mother[k] = (v + father[k]) / 2}
 

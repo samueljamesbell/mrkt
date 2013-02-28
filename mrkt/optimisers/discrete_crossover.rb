@@ -2,7 +2,7 @@ require 'mrkt/optimisers/genetic_optimiser'
 
 class DiscreteCrossover < GeneticOptimiser 
 
-  def crossover mother, father
+  def crossover mother, father, *weights
     child = {}
 
     random_keys = mother.keys.shuffle[0..(mother.keys.size/2)-1]

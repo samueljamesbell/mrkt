@@ -5,7 +5,7 @@ class GeneticOptimiser < Optimiser
 
   def optimise
     parents = best(50).combination(2).to_a.shuffle[0..(@population.size / 4)-1]
-    strategies = parents.map {|p| mutate(crossover(p[0].strategy, p[1].strategy))}
+    strategies = parents.map {|p| mutate(crossover(p[0].strategy, p[1].strategy, p[0].performance, p[1].performance))}
     strategies.each {|s| spawn_trader s}
     worst(25).each {|t| kill t}
   end
