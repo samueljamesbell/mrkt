@@ -4,7 +4,7 @@ class MeanCrossover < GeneticOptimiser
 
   def crossover mother, father
     result = mother.clone
-    result.map {|k, v| mother[k] = (v + father[k]) / 3}
+    result.map {|k, v| mother[k] = (v + father[k]) / 2}
 
     result
   end
