@@ -1,0 +1,3 @@
+[submodule "lib/gdash"]
+	path = lib/gdash
+	url = https://github.com/ripienaar/gdash
