@@ -7,11 +7,11 @@ class Warehouse
   attr_reader :price_regression, :dividend_regression, :average_dividend
 
   def initialize
-    @fnordmetric = FnordmetricClient.new :redis => Redis.new
+    @graphite = Graphite.new :host => '127.0.0.1', :port => 2003
     @prices = []
     @transaction_times = []
     @dividends = []
-    
+
     @price_regression = 0
     @dividend_regression = 0
     @average_dividend = 0
@@ -21,9 +21,11 @@ class Warehouse
     @prices << price
     t = Time.now
     @transaction_times << t
-    @fnordmetric.event('_incr', {'value' => @price, 'gauge' => 'latest_price'})
-    #@fnordmetric.event('_set', {'value' => @price, 'gauge' => 'latest_price'})
-
+    abort price.to_s unless price.finite?
+    puts "LOGGING #{price}"
+    @graphite.push_to_graphite do |graphite|
+      graphite.puts "mrkt.transactions.prices #{price} #{@graphite.time_now}"
+    end
 
     Thread.new { calculate_price_regression t }
     Thread.new { calculate_dividend_regression }

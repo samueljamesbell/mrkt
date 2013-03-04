@@ -1,3 +1,0 @@
-[submodule "lib/giraffe"]
-	path = lib/giraffe
-	url = git@github.com:kenhub/giraffe.git
