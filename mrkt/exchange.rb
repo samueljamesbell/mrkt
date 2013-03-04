@@ -62,7 +62,18 @@ class Exchange
         @asks.add(offer)
       end
 
+      puts "OFFER: #{offer.price}" if offer.price <= 0
       clear
+    end
+  end
+
+  def remove offer
+    @semaphore.synchronize do
+      if offer.instance_of? Bid
+        @bids.remove offer
+      elsif offer.instance_of? Ask
+        @asks.remove offer
+      end
     end
   end
 
@@ -72,11 +83,9 @@ class Exchange
 
     while bid && ask && bid.price >= ask.price && (bid.remaining_quantity != 0 || ask.remaining_quantity != 0)
       if !bid.active?
-        puts "Removed #{bid}"
         @bids.remove bid
         bid = @bids.peek
       elsif !ask.active?
-        puts "Removed #{ask}"
         @asks.remove ask
         ask = @asks.peek
       else
@@ -105,7 +114,6 @@ class Exchange
           bid = @bids.peek
         end
 
-        #puts "CLEARED, $#{price}"
         broadcast price
       end
     end

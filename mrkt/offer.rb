@@ -27,6 +27,7 @@ class Offer
     end
 
     def deactivate!
+      Exchange.remove self
       @active = false
     end
 
