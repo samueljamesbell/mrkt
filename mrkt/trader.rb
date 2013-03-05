@@ -104,7 +104,7 @@ class Trader
     v = value
     q = 0
 
-    while utility(offer_type, v, q) < utility(offer_type, v, q + 1) && @price * q <= @budget
+    while utility(offer_type, v, q) < utility(offer_type, v, q + 1) && utility(offer_type, v, q + 1) * q <= @budget
       q = q + 1
     end
 

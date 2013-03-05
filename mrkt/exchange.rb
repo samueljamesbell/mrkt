@@ -62,7 +62,6 @@ class Exchange
         @asks.add(offer)
       end
 
-      puts "OFFER: #{offer.price}" if offer.price <= 0
       clear
     end
   end
