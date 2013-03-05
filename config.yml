@@ -43,6 +43,14 @@ algorithms:
       price_regression: rand
       dividend_regression: rand
       average_dividend: rand
+  triple_crossover:
+    number_of_traders: 4
+    strategy:
+      risk_aversion: rand
+      exchange_price: rand
+      price_regression: rand
+      dividend_regression: rand
+      average_dividend: rand
   zero:
     number_of_traders: 4
     strategy:
