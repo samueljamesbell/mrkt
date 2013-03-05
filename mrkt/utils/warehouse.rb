@@ -21,8 +21,7 @@ class Warehouse
     @prices << price
     t = Time.now
     @transaction_times << t
-    abort price.to_s unless price.finite?
-    puts "LOGGING #{price}"
+
     @graphite.push_to_graphite do |graphite|
       graphite.puts "mrkt.transactions.prices #{price} #{@graphite.time_now}"
     end
