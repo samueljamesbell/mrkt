@@ -8,7 +8,7 @@ class Simulation
   def self.run
     Optimiser.init
 
-    CONFIG['simulation_runs'].times do |i| puts "Running simulation #{i}"
+    CONFIG['simulation_runs'].times do |i| puts "Running simulation #{i+1}"
       Exchange.run
       Optimiser.optimise
       puts Exchange.traders.sort_by! {|t| t.performance}
