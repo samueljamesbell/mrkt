@@ -1,4 +1,5 @@
 require 'csv'
+require_relative 'string_patch'
 
 class Warehouse
   include Singleton
@@ -64,6 +65,18 @@ class Warehouse
 
   def dividends_for_chart
     @dividends
+  end
+
+  def log_trader_performance trader, performance
+    @graphite.push_to_graphite do |graphite|
+      graphite.puts "mrkt.traders.#{trader.class.to_s.snake_case}.#{trader.object_id}.performance #{performance} #{@graphite.time_now}"
+    end
+  end
+
+  def log_optimiser_performance optimiser, performance
+    @graphite.push_to_graphite do |graphite|
+      graphite.puts "mrkt.optimisers.#{optimiser.class.to_s.snake_case}.performance #{performance} #{@graphite.time_now}"
+    end
   end
 
   def calculate_price_regression time

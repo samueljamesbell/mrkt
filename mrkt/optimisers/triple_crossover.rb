@@ -11,7 +11,7 @@ class TripleCrossover < Optimiser
 
   def crossover a, b, c
     result = a.clone
-    result.map {|k, v| mother[k] = (v + b[k] + c[k]) / 3}
+    result.map {|k, v| result[k] = (v + b[k] + c[k]) / 3}
 
     result
   end

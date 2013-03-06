@@ -11,7 +11,7 @@ visualiser: false
 
 algorithms:
   discrete_crossover:
-    number_of_traders: 4
+    number_of_traders: 6
     strategy:
       risk_aversion: rand
       exchange_price: rand
@@ -20,7 +20,7 @@ algorithms:
       average_dividend: rand
       noise: rand
   mean_crossover:
-    number_of_traders: 4
+    number_of_traders: 6
     strategy:
       risk_aversion: rand
       exchange_price: rand
@@ -28,7 +28,7 @@ algorithms:
       dividend_regression: rand
       average_dividend: rand
   weighted_mean_crossover:
-    number_of_traders: 4
+    number_of_traders: 6
     strategy:
       risk_aversion: rand
       exchange_price: rand
@@ -36,7 +36,7 @@ algorithms:
       dividend_regression: rand
       average_dividend: rand
   weighted_discrete_crossover:
-    number_of_traders: 4
+    number_of_traders: 6
     strategy:
       risk_aversion: rand
       exchange_price: rand
@@ -44,7 +44,7 @@ algorithms:
       dividend_regression: rand
       average_dividend: rand
   triple_crossover:
-    number_of_traders: 4
+    number_of_traders: 6
     strategy:
       risk_aversion: rand
       exchange_price: rand
@@ -52,7 +52,7 @@ algorithms:
       dividend_regression: rand
       average_dividend: rand
   zero:
-    number_of_traders: 4
+    number_of_traders: 6
     strategy:
       risk_aversion: 0
       noise: 1

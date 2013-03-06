@@ -74,7 +74,10 @@ class Trader
   end
 
   def performance
-    @budget + assets.size * @price
+    performance = @budget + assets.size * @price
+    Warehouse.log_trader_performance self, performance
+
+    performance
   end
 
   def to_s
