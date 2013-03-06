@@ -81,7 +81,7 @@ class Trader
   end
 
   def to_s
-    "#{@optimiser}: #{performance}"
+    "#{@optimiser}: #{performance.round(2)}"
   end
 
   private
