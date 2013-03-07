@@ -93,6 +93,9 @@ class Exchange
         bid.transfer_assets_from ask.trader
         bid.update_budgets ask, price
 
+        Warehouse.log_trader_performance bid.trader
+        Warehouse.log_trader_performance ask.trader
+
         if bid.remaining_quantity == ask.remaining_quantity
           bid.remaining_quantity = 0
           ask.remaining_quantity = 0

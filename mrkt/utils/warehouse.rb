@@ -67,15 +67,15 @@ class Warehouse
     @dividends
   end
 
-  def log_trader_performance trader, performance
+  def log_trader_performance trader
     @graphite.push_to_graphite do |graphite|
-      graphite.puts "mrkt.traders.#{trader.class.to_s.snake_case}.#{trader.object_id}.performance #{performance} #{@graphite.time_now}"
+      graphite.puts "mrkt.traders.#{trader.optimiser.to_s.snake_case}.#{trader.object_id}.performance #{trader.performance} #{@graphite.time_now}"
     end
   end
 
-  def log_optimiser_performance optimiser, performance
+  def log_optimiser_performance optimiser
     @graphite.push_to_graphite do |graphite|
-      graphite.puts "mrkt.optimisers.#{optimiser.class.to_s.snake_case}.performance #{performance} #{@graphite.time_now}"
+      graphite.puts "mrkt.optimisers.#{optimiser.class.to_s.snake_case}.performance #{optimiser.performance} #{@graphite.time_now}"
     end
   end
 

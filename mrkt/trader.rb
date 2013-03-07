@@ -3,14 +3,14 @@ require_relative 'ask'
 require_relative 'equity'
 
 class Trader
-  attr_reader :price
+  attr_reader :price, :optimiser
   attr_accessor :budget, :assets, :strategy
 
   DEFAULT_STRATEGY = {'risk_aversion' => 0}
 
   def initialize strategy, optimiser
     @strategy = DEFAULT_STRATEGY.merge strategy
-    @optimiser = optimiser    
+    @optimiser = optimiser
 
     @budget = CONFIG['initial_budget']
     @assets = []
@@ -74,10 +74,7 @@ class Trader
   end
 
   def performance
-    performance = @budget + assets.size * @price
-    Warehouse.log_trader_performance self, performance
-
-    performance
+    @budget + assets.size * @price
   end
 
   def to_s

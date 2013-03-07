@@ -27,7 +27,7 @@ class Optimiser
   end
 
   def Optimiser.log_performance
-    @optimisers.each {|optimiser| Warehouse.log_optimiser_performance(optimiser, optimiser.performance)}
+    @optimisers.each {|optimiser| Warehouse.log_optimiser_performance(optimiser)}
   end
 
   def initialize
