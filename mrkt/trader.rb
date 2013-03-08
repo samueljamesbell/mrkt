@@ -27,24 +27,11 @@ class Trader
 
     while @running
       v = value
+
       if v > @price
-        q = quantity :bid
-        price = utility(:bid, v, q) / q
-        offer = Bid.new(self, price, q)
-        unless price <= 0 || q <= 0
-          @latest_offer.deactivate! unless @latest_offer.nil?
-          Exchange.accept offer
-          @latest_offer = offer
-        end
+        make_offer :bid, v
       elsif v < @price
-        q = quantity :ask
-        price = (utility(:ask, v, q) / q).abs
-        offer = Ask.new(self, price, q)
-        unless price <= 0 || q <= 0
-          @latest_offer.deactivate! unless @latest_offer.nil?
-          Exchange.accept offer
-          @latest_offer = offer
-        end
+        make_offer :ask, v
       end
     end
   end
@@ -78,6 +65,20 @@ class Trader
   end
 
   private
+
+  def make_offer offer_type, value
+    quantity = quantity(offer_type)
+    price = utility(:bid, value, quantity) / quantity
+
+    offer_class = Kernel.const_get(offer_type.to_s.capitalize)
+    offer = offer_class.new(self, price, quantity)
+
+    unless price <= 0 || quantity <= 0
+      @latest_offer.deactivate! unless @latest_offer.nil?
+      Exchange.accept offer
+      @latest_offer = offer
+    end
+  end
 
   def value
     weights = 0
