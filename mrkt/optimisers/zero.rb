@@ -1,4 +1,3 @@
 require 'mrkt/optimiser'
 
-class Zero < Optimiser
-end
+class Zero < Optimiser; end
