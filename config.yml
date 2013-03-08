@@ -51,6 +51,11 @@ algorithms:
       price_regression: rand
       dividend_regression: rand
       average_dividend: rand
+  momentum:
+    number_of_traders: 6
+    strategy:
+      risk_aversion: 0.5
+      price_regression: 1
   zero:
     number_of_traders: 6
     strategy:
