@@ -17,7 +17,6 @@ class Trader
     CONFIG['initial_assets'].times { assets << Equity.new }
 
     @price = CONFIG['starting_price']
-    @dividend_history = []
     @running = false
 
     Exchange.register self
@@ -60,7 +59,6 @@ class Trader
 
   def accept_dividend(amount)
     @budget += amount * @assets.size
-    @dividend_history << amount
   end
 
   def reset
@@ -69,8 +67,6 @@ class Trader
     CONFIG['initial_assets'].times { assets << Equity.new }
     
     @price = CONFIG['starting_price']
-
-    @dividend_history = []
   end
 
   def performance
