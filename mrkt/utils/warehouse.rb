@@ -45,6 +45,8 @@ class Warehouse
   end
 
   def transactions
+    return {} if @transaction_times.empty? || @transaction_prices.empty? # HACK
+
     result = {}
     @transaction_prices.size.times {|i| result[zeroed_transaction_times[i]] = @transaction_prices[i]}
 
@@ -62,16 +64,16 @@ class Warehouse
 
   def calculate_price_regression time
     prices = transactions
-    if !prices.empty?
-      x_vector = prices.keys.to_vector(:scale)
-      y_vector = prices.values.to_vector(:scale)
-      regression = Statsample::Regression.simple(x_vector, y_vector)
-      @price_regression = regression.y(time + 10) #replace 10 with investment horizon?
-    end
+#    unless prices.empty?
+      #x_vector = prices.keys.to_vector(:scale)
+      #y_vector = prices.values.to_vector(:scale)
+      #regression = Statsample::Regression.simple(x_vector, y_vector)
+      #@price_regression = regression.y(time + 10) #replace 10 with investment horizon?
+#    end
   end
 
   def calculate_dividend_regression
-    if !@dividends.empty?
+    unless @dividends.empty?
       x_vector = @dividends.to_vector(:scale)
       y_vector = (0..@dividends.size-1).to_vector(:scale)
       regression = Statsample::Regression.simple(x_vector, y_vector)
