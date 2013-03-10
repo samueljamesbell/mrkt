@@ -10,12 +10,30 @@ class Warehouse
   def initialize
     @graphite = Graphite.new :host => '127.0.0.1', :port => 2003
 
+    @round = 0
+
     @transactions = Hash.new { |h, k| h[k] = [] }
     @dividends = []
+    @optimiser_performance = []
 
     @price_regression = 0
     @dividend_regression = 0
     @average_dividend = 0
+  end
+
+  def export
+    puts "Exporting warehoused data to CSV"
+
+    transactions_to_csv
+    dividends_to_csv
+    optimisers_to_csv
+  end
+
+  def reset
+    @transactions.clear
+    @dividends.clear
+
+    @round += 1
   end
 
   def log_transaction price
@@ -38,7 +56,24 @@ class Warehouse
   end
 
   def log_optimiser_performance optimiser
-    graphite_log "mrkt.optimisers.#{optimiser.class.to_s.snake_case}.performance", optimiser.performance
+    optimiser_name = optimiser.class.to_s.snake_case
+
+    @optimiser_performance[@round] ||= {}
+    @optimiser_performance[@round][optimiser_name] = optimiser.performance
+
+    graphite_log "mrkt.optimisers.#{optimiser_name}.performance", optimiser.performance
+  end
+
+  def transactions_to_csv
+  end
+
+  def dividends_to_csv
+  end
+
+  def optimisers_to_csv
+    CSV.open("data/optimisers-#{Time.now}.csv", "w") do |csv|
+      @optimiser_performance.each_with_index { |performance, index| csv << [index, performance.to_a].flatten }
+    end
   end
 
   def calculate_price_regression

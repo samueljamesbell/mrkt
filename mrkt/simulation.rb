@@ -10,11 +10,17 @@ class Simulation
 
     CONFIG['simulation_runs'].times do |i| puts "Running simulation #{i+1}"
       Exchange.run
+
       Optimiser.log_performance
       Optimiser.optimise
+
       puts Exchange.traders.sort_by! {|t| t.performance}
+
       Exchange.reset
+      Warehouse.reset
     end
+
+    Warehouse.export
   end
 
 end
