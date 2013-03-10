@@ -10,8 +10,7 @@ class Warehouse
   def initialize
     @graphite = Graphite.new :host => '127.0.0.1', :port => 2003
 
-    @transaction_prices = []
-    @transaction_times = []
+    @transactions = Hash.new { |h, k| h[k] = [] }
     @dividends = []
 
     @price_regression = 0
@@ -20,14 +19,12 @@ class Warehouse
   end
 
   def log_transaction price
-    time = Time.now
-    @transaction_prices << price
-    @transaction_times << time
+    @transactions[Time.now] << price
 
     graphite_log "mrkt.transactions.prices", price
 
     # Perform other calculations here
-    Thread.new { calculate_price_regression time }
+    Thread.new { calculate_price_regression }
     Thread.new { calculate_dividend_regression }
     Thread.new { calculate_average_dividend }
   end
@@ -44,38 +41,25 @@ class Warehouse
     graphite_log "mrkt.optimisers.#{optimiser.class.to_s.snake_case}.performance", optimiser.performance
   end
 
-  def transactions
-    return {} if @transaction_times.empty? || @transaction_prices.empty? # HACK
+  def calculate_price_regression
+    unless @transactions.empty?
+      keys = @transaction.keys.inject([]) do |array, key|
+        @transactions[key].each_index { |i| array << key.to_f + (i / 1000) }
+      end
 
-    result = {}
-    @transaction_prices.size.times {|i| result[zeroed_transaction_times[i]] = @transaction_prices[i]}
+      x_vector = keys.to_vector(:scale)
+      y_vector = @transactions.values.flatten.to_vector(:scale)
 
-    result
-  end
-
-  def zeroed_transaction_times
-    start_time = @transaction_times[0].to_i
-    @transaction_times.map {|t| t.to_i - start_time}
-  end
-
-  def dividends
-    @dividends
-  end
-
-  def calculate_price_regression time
-    prices = transactions
-#    unless prices.empty?
-      #x_vector = prices.keys.to_vector(:scale)
-      #y_vector = prices.values.to_vector(:scale)
-      #regression = Statsample::Regression.simple(x_vector, y_vector)
-      #@price_regression = regression.y(time + 10) #replace 10 with investment horizon?
-#    end
+      regression = Statsample::Regression.simple(x_vector, y_vector)
+      @price_regression = regression.y(Time.now + 10) #replace 10 with investment horizon?
+    end
   end
 
   def calculate_dividend_regression
     unless @dividends.empty?
       x_vector = @dividends.to_vector(:scale)
       y_vector = (0..@dividends.size-1).to_vector(:scale)
+
       regression = Statsample::Regression.simple(x_vector, y_vector)
       @dividend_regression = regression.y(@dividends.size)
     end
