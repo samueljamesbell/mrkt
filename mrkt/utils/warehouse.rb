@@ -16,6 +16,8 @@ class Warehouse
     @dividends = []
     @optimiser_performance = []
 
+    @dividend_history = Array.new(CONFIG['simulation_runs']) { [] }
+
     @price_regression = 0
     @dividend_regression = 0
     @average_dividend = 0
@@ -49,6 +51,7 @@ class Warehouse
 
   def log_dividend amount
     @dividends << amount
+    @dividend_history[@round] << amount
   end
 
   def log_trader_performance trader
@@ -68,6 +71,10 @@ class Warehouse
   end
 
   def dividends_to_csv
+    CSV.open("data/dividends-#{Time.now.to_i}.csv", "w") do |csv|
+      csv << ['round', (1..CONFIG['number_of_periods']).to_a].flatten
+      @dividend_history.each_with_index { |dividends, index| csv << [index, dividends].flatten }
+    end
   end
 
   def optimisers_to_csv
