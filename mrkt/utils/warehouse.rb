@@ -17,6 +17,7 @@ class Warehouse
     @optimiser_performance = []
 
     @dividend_history = Array.new(CONFIG['simulation_runs']) { [] }
+    @transaction_history = Array.new(CONFIG['simulation_runs']) { [] }
 
     @price_regression = 0
     @dividend_regression = 0
@@ -40,6 +41,7 @@ class Warehouse
 
   def log_transaction price
     @transactions[Time.now] << price
+    @transaction_history[@round] << price
 
     graphite_log "mrkt.transactions.prices", price
 
@@ -68,6 +70,10 @@ class Warehouse
   end
 
   def transactions_to_csv
+    CSV.open("data/transactions-#{Time.now.to_i}.csv", "w") do |csv|
+      csv << ['round', 'transactions']
+      @transaction_history.each_with_index { |transactions, index| csv << [index, transactions].flatten }
+    end
   end
 
   def dividends_to_csv
