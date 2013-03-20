@@ -71,7 +71,7 @@ class Warehouse
   end
 
   def optimisers_to_csv
-    CSV.open("data/optimisers-#{Time.now}.csv", "w") do |csv|
+    CSV.open("data/optimisers-#{Time.now.to_i}.csv", "w") do |csv|
       csv << ['round', @optimiser_performance[0].keys].flatten
       @optimiser_performance.each_with_index { |performance, index| csv << [index, performance.values].flatten }
     end
