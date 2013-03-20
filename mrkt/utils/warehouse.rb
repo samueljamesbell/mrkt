@@ -71,7 +71,7 @@ class Warehouse
   def transactions_to_csv
     CSV.open("data/transactions-#{Time.now.to_i}.csv", "w") do |csv|
       csv << ['round', 'transactions']
-      @transaction_history.each_with_index { |transactions, index| csv << [index, transactions].flatten }
+      @transaction_history.each_with_index { |transactions, index| csv << [index, transactions.map { |t| t.round(2) }].flatten }
     end
   end
 
