@@ -14,8 +14,8 @@ class Warehouse
 
     @transactions = Hash.new { |h, k| h[k] = [] }
     @dividends = []
-    @optimiser_performance = []
 
+    @optimiser_performance = Array.new(CONFIG['simulation_runs']) { {} }
     @dividend_history = Array.new(CONFIG['simulation_runs']) { [] }
     @transaction_history = Array.new(CONFIG['simulation_runs']) { [] }
 
@@ -63,7 +63,6 @@ class Warehouse
   def log_optimiser_performance optimiser
     optimiser_name = optimiser.class.to_s.snake_case
 
-    @optimiser_performance[@round] ||= {}
     @optimiser_performance[@round][optimiser_name] = optimiser.performance
 
     graphite_log "mrkt.optimisers.#{optimiser_name}.performance", optimiser.performance
