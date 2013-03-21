@@ -102,7 +102,7 @@ class Warehouse
 
   def calculate_price_regression
     unless @transactions.empty?
-      keys = @transaction.keys.inject([]) do |array, key|
+      keys = @transactions.keys.inject([]) do |array, key|
         @transactions[key].each_index { |i| array << key.to_f + (i / 1000) }
       end
 
