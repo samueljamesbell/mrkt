@@ -2,10 +2,16 @@ require 'csv'
 require_relative 'string_patch'
 
 class Warehouse
-  include Singleton
-  extend SingleForwardable
 
   attr_reader :price_regression, :dividend_regression, :average_dividend
+
+  def self.method_missing method, *args
+    self.instance.send(method, *args)
+  end
+
+  def self.instance
+    @instance ||= self.new
+  end
 
   def initialize
     @graphite = Graphite.new :host => '127.0.0.1', :port => 2003
@@ -137,7 +143,5 @@ class Warehouse
   def open_csv log_type
     yield CSV.open("data/#{log_type.to_s}-#{Time.now.to_i}.csv", 'w')
   end
-
-  def_delegators :instance, *Warehouse.instance_methods(false)
 
 end
