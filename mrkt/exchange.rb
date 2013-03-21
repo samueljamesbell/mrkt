@@ -1,10 +1,16 @@
 java_import 'java.util.PriorityQueue'
 
 class Exchange
-  include Singleton
-  extend SingleForwardable
 
   attr_reader :traders, :bids, :asks, :equity_risk, :cash_risk
+
+  def self.method_missing method, *args
+    self.instance.send(method, *args)
+  end
+
+  def self.instance
+    @instance ||= self.new
+  end
 
   def initialize
     puts "Exchange initialised"
@@ -132,7 +138,5 @@ class Exchange
     @traders.each {|trader| trader.reset}
     @dividends = RandomWalk.generate(0..CONFIG['starting_price'], CONFIG['number_of_periods'], 5)
   end
-
-  def_delegators :instance, *Exchange.instance_methods(false)
 
 end
