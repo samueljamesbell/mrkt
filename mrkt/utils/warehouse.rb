@@ -59,18 +59,14 @@ class Warehouse
   end
 
   def log_trader_performance trader
-    trader_name = trader.optimiser.to_s.snake_case
-
-    @trader_history[@round][trader_name] << trader.performance
-
-    graphite_log "mrkt.traders.#{trader_name}.#{trader.object_id}.performance", trader.performance
+    @trader_history[@round][trader] << trader.performance
+    graphite_log "mrkt.traders.#{trader.optimiser.to_s.snake_case}.#{trader.object_id}.performance", trader.performance
   end
 
   def log_optimiser_performance optimiser
     optimiser_name = optimiser.class.to_s.snake_case
 
     @optimiser_history[@round][optimiser_name] = optimiser.performance
-
     graphite_log "mrkt.optimisers.#{optimiser_name}.performance", optimiser.performance
   end
 
@@ -90,8 +86,10 @@ class Warehouse
 
   def traders_to_csv
     open_csv :traders do |csv|
-      csv << ['round', 'traders']
-      @trader_history.each_with_index { |trader, round| trader.each { |trader_name, performance| csv << [round + 1, trader_name, performance].flatten } }
+      csv << ['round', 'optimiser', 'trader', 'performance']
+      @trader_history.each_with_index do |traders, round|
+        traders.each { |trader, performance| csv << [round + 1, trader.optimiser.to_s.snake_case, trader.object_id, performance].flatten }
+      end
     end
   end
 
