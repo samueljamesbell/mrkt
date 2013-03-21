@@ -16,6 +16,7 @@ class Warehouse
     @dividends = []
 
     @optimiser_performance = Array.new(CONFIG['simulation_runs']) { {} }
+    @trader_history = Array.new(CONFIG['simulation_runs']) { Hash.new{ |h, k| h[k] = [] } }
     @dividend_history = Array.new(CONFIG['simulation_runs']) { [] }
     @transaction_history = Array.new(CONFIG['simulation_runs']) { [] }
 
@@ -30,6 +31,7 @@ class Warehouse
     transactions_to_csv
     dividends_to_csv
     optimisers_to_csv
+    traders_to_csv
   end
 
   def reset
@@ -57,7 +59,11 @@ class Warehouse
   end
 
   def log_trader_performance trader
-    graphite_log "mrkt.traders.#{trader.optimiser.to_s.snake_case}.#{trader.object_id}.performance", trader.performance
+    trader_name = trader.optimiser.to_s.snake_case
+
+    @trader_history[@round][trader_name] << trader.performance
+
+    graphite_log "mrkt.traders.#{trader_name}.#{trader.object_id}.performance", trader.performance
   end
 
   def log_optimiser_performance optimiser
@@ -79,6 +85,13 @@ class Warehouse
     CSV.open("data/dividends-#{Time.now.to_i}.csv", "w") do |csv|
       csv << ['round', (1..CONFIG['number_of_periods']).to_a].flatten
       @dividend_history.each_with_index { |dividends, index| csv << [index, dividends].flatten }
+    end
+  end
+
+  def traders_to_csv
+    CSV.open("data/traders-#{Time.now.to_i}.csv", "w") do |csv|
+      csv << ['round', 'traders']
+      @trader_history.each_with_index { |trader, round| trader.each { |trader_name, performance| csv << [round + 1, trader_name, performance].flatten } }
     end
   end
 
