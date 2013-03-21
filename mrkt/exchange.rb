@@ -1,16 +1,11 @@
+require_relative 'utils/simple_singleton'
+
 java_import 'java.util.PriorityQueue'
 
 class Exchange
+  extend SimpleSingleton
 
   attr_reader :traders, :bids, :asks, :equity_risk, :cash_risk
-
-  def self.method_missing method, *args
-    self.instance.send(method, *args)
-  end
-
-  def self.instance
-    @instance ||= self.new
-  end
 
   def initialize
     puts "Exchange initialised"

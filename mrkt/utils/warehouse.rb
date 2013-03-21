@@ -1,17 +1,11 @@
 require 'csv'
 require_relative 'string_patch'
+require_relative 'simple_singleton'
 
 class Warehouse
+  extend SimpleSingleton
 
   attr_reader :price_regression, :dividend_regression, :average_dividend
-
-  def self.method_missing method, *args
-    self.instance.send(method, *args)
-  end
-
-  def self.instance
-    @instance ||= self.new
-  end
 
   def initialize
     @graphite = Graphite.new :host => '127.0.0.1', :port => 2003
