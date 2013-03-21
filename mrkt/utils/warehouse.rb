@@ -75,30 +75,30 @@ class Warehouse
   end
 
   def transactions_to_csv
-    CSV.open("data/transactions-#{Time.now.to_i}.csv", "w") do |csv|
+    open_csv :transactions do |csv|
       csv << ['round', 'transactions']
-      @transaction_history.each_with_index { |transactions, index| csv << [index, transactions.map { |t| t.round(2) }].flatten }
+      @transaction_history.each_with_index { |transactions, round| csv << [round, transactions.map { |t| t.round(2) }].flatten }
     end
   end
 
   def dividends_to_csv
-    CSV.open("data/dividends-#{Time.now.to_i}.csv", "w") do |csv|
+    open_csv :dividends do |csv|
       csv << ['round', (1..CONFIG['number_of_periods']).to_a].flatten
-      @dividend_history.each_with_index { |dividends, index| csv << [index, dividends].flatten }
+      @dividend_history.each_with_index { |dividends, round| csv << [round, dividends].flatten }
     end
   end
 
   def traders_to_csv
-    CSV.open("data/traders-#{Time.now.to_i}.csv", "w") do |csv|
+    open_csv :traders do |csv|
       csv << ['round', 'traders']
       @trader_history.each_with_index { |trader, round| trader.each { |trader_name, performance| csv << [round + 1, trader_name, performance].flatten } }
     end
   end
 
   def optimisers_to_csv
-    CSV.open("data/optimisers-#{Time.now.to_i}.csv", "w") do |csv|
+    open_csv :optimisers do |csv|
       csv << ['round', @optimiser_performance[0].keys].flatten
-      @optimiser_performance.each_with_index { |performance, index| csv << [index, performance.values].flatten }
+      @optimiser_performance.each_with_index { |performance, round| csv << [round, performance.values].flatten }
     end
   end
 
@@ -134,6 +134,10 @@ class Warehouse
 
   def graphite_log key, value
     @graphite.push_to_graphite {|g| g.puts "#{key} #{value} #{@graphite.time_now}"}
+  end
+
+  def open_csv log_type
+    yield CSV.open("data/#{log_type.to_s}-#{Time.now.to_i}.csv", 'w')
   end
 
   def_delegators :instance, *Warehouse.instance_methods(false)
