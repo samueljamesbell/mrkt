@@ -15,10 +15,10 @@ class Warehouse
     @transactions = Hash.new { |h, k| h[k] = [] }
     @dividends = []
 
-    @optimiser_performance = Array.new(CONFIG['simulation_runs']) { {} }
-    @trader_history = Array.new(CONFIG['simulation_runs']) { Hash.new{ |h, k| h[k] = [] } }
-    @dividend_history = Array.new(CONFIG['simulation_runs']) { [] }
     @transaction_history = Array.new(CONFIG['simulation_runs']) { [] }
+    @dividend_history = Array.new(CONFIG['simulation_runs']) { [] }
+    @trader_history = Array.new(CONFIG['simulation_runs']) { Hash.new{ |h, k| h[k] = [] } }
+    @optimiser_history = Array.new(CONFIG['simulation_runs']) { {} }
 
     @price_regression = 0
     @dividend_regression = 0
@@ -69,7 +69,7 @@ class Warehouse
   def log_optimiser_performance optimiser
     optimiser_name = optimiser.class.to_s.snake_case
 
-    @optimiser_performance[@round][optimiser_name] = optimiser.performance
+    @optimiser_history[@round][optimiser_name] = optimiser.performance
 
     graphite_log "mrkt.optimisers.#{optimiser_name}.performance", optimiser.performance
   end
@@ -97,8 +97,8 @@ class Warehouse
 
   def optimisers_to_csv
     open_csv :optimisers do |csv|
-      csv << ['round', @optimiser_performance[0].keys].flatten
-      @optimiser_performance.each_with_index { |performance, round| csv << [round, performance.values].flatten }
+      csv << ['round', @optimiser_history[0].keys].flatten
+      @optimiser_history.each_with_index { |performance, round| csv << [round, performance.values].flatten }
     end
   end
 
