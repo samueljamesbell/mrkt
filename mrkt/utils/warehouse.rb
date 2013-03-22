@@ -9,6 +9,7 @@ class Warehouse
 
   def initialize
     @graphite = Graphite.new :host => '127.0.0.1', :port => 2003
+    @transactions_semaphore = Mutex.new
 
     @round = 0
 
@@ -101,16 +102,20 @@ class Warehouse
   end
 
   def calculate_price_regression
-    unless @transactions.empty?
-      keys = @transactions.keys.inject([]) do |array, key|
-        @transactions[key].each_index { |i| array << key.to_f + (i / 1000) }
+    unless @transactions_semaphore.locked?
+      @transactions_semaphore.synchonize do
+        unless @transactions.empty?
+          keys = @transactions.keys.inject([]) do |array, key|
+            @transactions[key].each_index { |i| array << key.to_f + (i / 1000) }
+          end
+
+          x_vector = keys.to_vector(:scale)
+          y_vector = @transactions.values.flatten.to_vector(:scale)
+
+          regression = Statsample::Regression.simple(x_vector, y_vector)
+          @price_regression = regression.y(Time.now + 10) #replace 10 with investment horizon?
+        end
       end
-
-      x_vector = keys.to_vector(:scale)
-      y_vector = @transactions.values.flatten.to_vector(:scale)
-
-      regression = Statsample::Regression.simple(x_vector, y_vector)
-      @price_regression = regression.y(Time.now + 10) #replace 10 with investment horizon?
     end
   end
 
